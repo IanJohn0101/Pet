@@ -16,4 +16,8 @@
                     <button id = "cart_btn"><a href = 'cart.php'>Cart (<?php echo cart_count(); ?>)</a></button>
                 </form>
             </div><!-- <End of Search> -->
-        </div><!-- <End of Header> -->
+</div><!-- <End of Header> -->
+<style>
+    
+</style>
+
