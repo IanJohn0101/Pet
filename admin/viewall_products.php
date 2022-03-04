@@ -1,5 +1,5 @@
 <div class = "scroll" id ="bodyright">
-    <h3>View All Products</h3>
+    <h3>View Products</h3>
     <form method = "POST" enctype = "multipart/form-data">
     <table>
         <tr>

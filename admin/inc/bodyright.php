@@ -1,6 +1,6 @@
 <?php
     if(!isset($_GET['viewall_cat'])){
-    if(!isset($_GET['viewall_sub_cat'])){
+    if(!isset($_GET['sales_inventory'])){
     if(!isset($_GET['add_products'])){
     if(!isset($_GET['viewall_products'])){
     if(!isset($_GET['viewall_users'])){

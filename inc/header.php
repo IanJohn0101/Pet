@@ -17,7 +17,4 @@
                 </form>
             </div><!-- <End of Search> -->
 </div><!-- <End of Header> -->
-<style>
-    
-</style>
 

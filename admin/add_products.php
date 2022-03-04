@@ -1,7 +1,8 @@
 <div id ="bodyright">
+    <div class="brandCat">
     <h3>Add Products</h3>
     <form method = "POST" enctype = "multipart/form-data">
-        <table>
+        <table id = "addProduct">
             <tr>
                 <td>Enter Product Name: </td>
                 <td><input type="text" name = "pro_name" /></td>
@@ -33,7 +34,7 @@
             </tr>
             <tr>
                 <td>Select 1st Product Image: </td>
-                <td><input type="file" name = "pro_img" /></td>
+                <td><input type="file" name = "pro_img" id = "first"/></td>
             </tr>
             <tr>
                 <td>Select 2nd Product Image: </td>
@@ -60,8 +61,10 @@
                 <td><input type="text" name = "pro_keyword" /></td>
             </tr>
         </table>
-        <button name = "add_prod">Add Product</button>
+        <button name = "add_prod" id = "addProd">Add Product</button>
     </form>
+    </div>
+   
 </div>
 
 <?php

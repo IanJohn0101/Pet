@@ -1,25 +1,26 @@
 <div id = "bodyleft">
-    <h3>Content Management</h3>
-
+<p id = "blText">Admin Dashboard</p>
     <ul>
-        <li><a href = "index.php">Home</a></li>
-        <li><a href = "index.php?viewall_cat">View All Categories</a></li>
-        <li><a href = "index.php?viewall_sub_cat">View All Sub Categories</a></li>
-        <li><a href = "index.php?add_products">Add New Product</a></li>
-        <li><a href = "index.php?viewall_products">View All Product</a></li>
-        <li><a href= "index.php?viewall_users">View All Users</a></li> 
+        <li><img src="../uploads/home.svg" class="navicons"> <a href = "index.php">Home</a></li>
+        <li><img src="../uploads/category.png" class="navicons"><a href = "index.php?viewall_cat">Categories</a></li>
+        <li><img src="../uploads/brand.png" class="navicons"><a href = "index.php?sales_inventory">Sales Inventory</a></li>
+        <li><img src="../uploads/add3.png" class="navicons"><a href = "index.php?add_products">Add New Product</a></li>
+        <li><img src="../uploads/view.png" class="navicons"><a href = "index.php?viewall_products">View Products</a></li>
+        <li><img src="../uploads/user2.png" class="navicons1"><a href= "index.php?viewall_users">View All Users</a></li> 
 
     </ul>
 </div>
+<div class="btm">
 
+</div>
 <?php
     if(isset($_GET['viewall_cat']))
     {
         include("cat.php");
     }
-    if(isset($_GET['viewall_sub_cat']))
+    if(isset($_GET['sales_inventory']))
     {
-        include("sub_cat.php");
+        include("sales_inventory.php");
     }
     if(isset($_GET['viewall_products']))
     {
@@ -35,3 +36,9 @@
     }
 
 ?>
+<script>
+    var $li = $('#bodyleft ul li').click(function(){
+        $li.removeClass('selected');
+        $(this).addClass('selected');
+    })
+</script>
