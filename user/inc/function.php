@@ -2,9 +2,6 @@
     session_start();
     function signUp()
     {
-
-
-        
         include("inc/db.php");
         if(isset($_POST['sign_up']))
         {
@@ -61,16 +58,27 @@
             $countUser = $fetchuser->rowCount();
 
             $row = $fetchuser->fetch();
+            $user_role = $row['user_type'];
             if($countUser>0)
             {
-                $_SESSION['user_username'] = $_POST['user_username'];
-                echo "<script>window.open('index.php?login_user=".$_SESSION['user_username']."','_self');</script>";
+                switch($user_role)
+                {
+                    case "user":
+                        $_SESSION['user_username'] = $_POST['user_username'];
+                        echo "<script>window.open('index.php?login_user=".$_SESSION['user_username']."','_self');</script>";
+                    break;
+                    case "admin":
+                        $_SESSION['admin_name'] = $_POST['user_username'];
+                        echo "<script>window.open('/Pet/admin/index.php?login_user=".$_SESSION['admin_name']."','_self');</script>";
+                    break;
+                }
             }
             else
             {
                 echo "<script>alert('Username or Password is incorrect!');</script>";
             }
         }
+
     }
     
     function myProfile()

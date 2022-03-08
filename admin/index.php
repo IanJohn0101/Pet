@@ -1,3 +1,7 @@
+<?php
+    include("inc/function.php");
+    echo fetchadmin();
+?>
 <!DOCTYPE html>
 <html>
     <head>

@@ -1,4 +1,95 @@
 <?php
+    session_start();
+
+    function fetchadmin()
+    {
+        include("inc/db.php");
+        if(!isset($_SESSION['admin_name']))
+        {
+            echo "<script>window.open('/Pet/user/login.php?', '_self');</script>";
+        }
+        if(isset($_SESSION['admin_name']))
+        {
+            echo "<script>window.open('/Pet/admin/index.php?login_user=".$_SESSION['admin_name']."', '_self');</script>";
+        }
+    }
+
+    function myProfile()
+    {
+        include("inc/db.php");
+        if(isset($_SESSION['admin_name']))
+        {
+            $user_id = $_SESSION['admin_name'];
+            $fetch_user_username = $con->prepare("SELECT * FROM users_table WHERE user_username = '$user_id'");
+            $fetch_user_username->setFetchMode(PDO:: FETCH_ASSOC);
+            $fetch_user_username->execute();
+    
+            $row = $fetch_user_username->fetch();
+            $id = $row['user_id'];
+    
+            echo 
+            "<form method = 'POST' enctype='multipart/form-data'>
+                <table>
+                    <tr>
+                        <td>Username: </td>
+                        <td><input type = 'text' name =  'user_username' value = '".$row['user_username']."' /></td>
+                    </tr>
+                    <tr>
+                        <td>Password: </td>
+                        <td><input type = 'password' name = 'user_password' value = '".$row['user_password']."' /></td>
+                    </tr>
+                    <tr>
+                        <td>Email: </td>
+                        <td><input type = 'email' name = 'user_email' value = '".$row['user_email']."' /></td>
+                    </tr>
+                    <tr>
+                        <td>Contact Number: </td>
+                        <td><input type = 'text' name = 'user_contactnumber' value = '".$row['user_contactnumber']."' /></td>
+                    </tr>
+                    <tr>
+                        <td>User Type: </td>
+                        <td><input type = 'text' name = 'user_type' value = '".$row['user_type']."' /></td>
+                    </tr>
+                    <tr>
+                        <td>Profile Photo: </td>
+                        <td>
+                            <input type = 'file' name = 'user_profilephoto' />
+                            <img src = '../uploads/user_profile/".$row['user_profilephoto']."'  />
+                        </td>
+                    </tr>
+                </table>
+                <button name = 'update_user'>Update Profile</button>
+            </form>";
+    
+            if(isset($_POST['update_user']))
+            {
+                $user_username = $_POST['user_username'];
+                $user_password =  $_POST['user_password'];
+                $user_contactnumber = $_POST['user_contactnumber'];
+                $user_email = $_POST['user_email'];
+                $user_profilephoto = $_POST['user_profilephoto'];
+                $user_type = $_POST['user_type'];
+    
+                $update_user = $con->prepare("UPDATE users_table 
+                SET 
+                    user_username='$user_username',
+                    user_password = '$user_password',
+                    user_contactnumber = '$user_contactnumber',
+                    user_email = '$user_email',
+                    user_type = '$user_type',
+                    user_profilephoto = '$user_profilephoto'
+                WHERE 
+                    user_id = '$id'");
+    
+                if($update_user->execute())
+                {
+                    echo "<script>alert('Your Information Successfully Updated!');</script>";
+                    echo "<script>window.open('/Pet/admin/index.php?login_user=".$_SESSION['admin_name']."', '_self');</script>";
+                }
+            }
+        }
+    }
+
     function add_cat() 
     {
         include("inc/db.php");

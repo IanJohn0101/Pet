@@ -15,7 +15,7 @@
     
     <div id = 'link'>
         <ul>
-            <?php 
+            <?php
                 if(isset($_SESSION['user_username']))
                 {
                     // echo "<li>".$_SESSION['user_username']."</li>";
