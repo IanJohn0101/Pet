@@ -9,8 +9,8 @@
             
             if($add_cat->execute())
             {
-            echo "<script>alert('Category Added Successfully!');</script>"; 
-            echo "<script>window.open('index.php?viewall_cat','_self');</script>";
+    
+            echo "<script>window.open('index.php?cat','_self');</script>";
             }
             else
             {
@@ -142,8 +142,8 @@
             echo "<tr>
                     <td>".$i++."</td>
                     <td>".$row['cat_name']."</td>
-                    <td><a href='index.php?edit_cat=".$row['prod_id']."'>Edit</a></td>
-                    <td><a href='delete_cat.php?delete_cat=".$row['prod_id']."'>Delete</a></td>
+                    <td style='width:5%'><a href='index.php?edit_cat=".$row['prod_id']."'><img src='../uploads/edit2.svg' class = 'editIcon'></img></a></td>
+                    <td style='width:5%'><a href='delete_cat.php?delete_cat=".$row['prod_id']."'><img src='../uploads/delete1.svg' class = 'editIcon'></a></td>
                  </tr>";
         endwhile;
     }
@@ -446,8 +446,8 @@
         $delete_cat  = $con->prepare("delete from pet_prod where prod_id = '$delete_cat_id'");
         if($delete_cat->execute())
         {
-            echo "<script>alert('Category Deleted Successfully!');</script>";
-            echo "<script>window.open('index.php?viewall_cat','_self');</script>";
+            
+            echo "<script>window.open('index.php?cat','_self');</script>";
         }
     }
 

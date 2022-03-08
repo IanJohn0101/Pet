@@ -4,9 +4,9 @@
     <form method = "POST">
         <table>
             <tr>
-                <td>Enter Category Name: </td>
-                <td><input type="text" name = "cat_name" /></td>
-                <td> <button name = "add_cat">Add Category</button></td>
+                <td style="width:25%">Enter Category Name: </td>
+                <td style="width:50%"><input type="text" name = "cat_name" /></td>
+                <td style="width:25%">  <button name = "add_cat">Add Category</button></td>
             </tr>
         </table>
        
@@ -16,12 +16,11 @@
     <div class="caty">
     <h3>Categories</h3>
     <form method = "POST" enctype = "multipart/form-data">
-        <table>
-            <tr>
-                <th>Category Id</th>
-                <th>Category Name</th>
-                <th>Edit</th>
-                <th>Delete</th>
+        <table style="width:100%">
+            <tr class="heads" >
+                <th style='width: 5%'>Id</th>
+                <th colspan = '3' style='width: 80%'>Categories</th>
+               
             </tr>
             <tr>
                 <?php
