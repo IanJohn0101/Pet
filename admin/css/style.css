@@ -161,8 +161,8 @@ body {
 .subList li a {
   display: inline-block;
   float: none;
-  padding-left: 1%;
-  width: 99%;
+  padding-left: 5px;
+  width: 100%;
 }
 .subList li a:hover {
   background: #28287774;
@@ -170,7 +170,7 @@ body {
 }
 
 #bodyright {
-  padding-left: 10px;
+  padding-left: 20px;
   overflow-x: scroll;
   width: 80%;
   height: 100;
