@@ -1,18 +1,18 @@
 <?php
     session_start();
 
-    function fetchadmin()
-    {
-        include("inc/db.php");
-        if(!isset($_SESSION['admin_name']))
-        {
-            echo "<script>window.open('/Pet/user/index.php?', '_self');</script>";
-        }
-        if(isset($_SESSION['admin_name']))
-        {
-            echo "<script>window.open('/Pet/user/index.php?login_user=".$_SESSION['admin_name']."', '_self');</script>";
-        }
-    }
+    // function fetchadmin()
+    // {
+    //     include("inc/db.php");
+    //     if(!isset($_SESSION['admin_name']))
+    //     {
+    //         echo "<script>window.open('/Pet/user/index.php?', '_self');</script>";
+    //     }
+    //     if(isset($_SESSION['admin_name']))
+    //     {
+    //         echo "<script>window.open('/Pet/user/index.php?login_user=".$_SESSION['admin_name']."', '_self');</script>";
+    //     }
+    // }
 
     function myProfile()
     {
@@ -313,11 +313,11 @@
             <form method = 'POST'>
                 <table>
                     <tr>
-                        <td>Category Name: </td>
-                        <td><input type='text' name = 'cat_name' value = '".$row['cat_name']."'/></td>
+                        <td style='width:20%'>Category Name: </td>
+                        <td style='width:80%'><input type='text' name = 'cat_name' value = '".$row['cat_name']."'/></td>
+                        <td style='width:10%'><button name = 'update_cat'>Update</button></td>
                     </tr>
                 </table>
-                <button name = 'update_cat'>Update Category</button>
             </form>";
 
             if(isset($_POST['update_cat']))

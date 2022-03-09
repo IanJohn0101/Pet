@@ -118,6 +118,7 @@ body {
   height: 30px;
   line-height: 30px;
   margin-top: 5px;
+  width: 100%;
 }
 .leftBody ul .donate {
   background: rgba(0, 0, 0, 0);
@@ -153,16 +154,19 @@ body {
 .subList {
   font-size: 0.8vw;
   color: white;
-  margin-left: 25px;
+  margin-left: 20px;
   border-left: 0.7px solid white;
   margin-bottom: 15px;
 }
-.subList li {
+.subList li a {
+  display: inline-block;
   float: none;
-  padding-left: 5px;
+  padding-left: 1%;
+  width: 99%;
 }
-.subList li:hover {
+.subList li a:hover {
   background: #28287774;
+  transition: ease-in-out 0.5s;
 }
 
 #bodyright {
@@ -185,7 +189,6 @@ body {
   font-family: "Varela Round", sans-serif;
 }
 table {
-  border-spacing: 0px;
   width: 100%;
 }
 
@@ -195,7 +198,6 @@ table {
 }
 
 #bodyright form table tr td {
-  padding-left: 1%;
   height: 35px;
   color: #444;
 }
@@ -210,6 +212,7 @@ table {
 
 #bodyright form table tr td input {
   padding-left: 2%;
+  padding-right: 20px;
   height: 30px;
   border-radius: 3px;
   width: 100%;
@@ -237,7 +240,7 @@ table {
 }
 
 #bodyright form button {
-  height: 30px;
+  height: 35px;
   color: #fff;
   border-radius: 3px;
   width: 100px;

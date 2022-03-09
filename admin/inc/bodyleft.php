@@ -4,16 +4,16 @@
 <ul>
         <li class =  "donate"><a href = "index.php"><img src="../uploads/donation2.1.svg" class="navicons">Donations</a></li>
             <ul class="subList">
-                <li>Manage Donations</li>
-                <li>Manage Partners</li>
-                <li>Ledger</li>
+                <li><a href = "index.php?manage_donation">Manage Donations</a></li>
+                <li><a href = "index.php?donation_partners">Manage Partners</a></li>
+                <li><a href = "index.php?ledger">Ledger</a></li>
             </ul>
         <li><a href = "index.php?cat"><img src="../uploads/categories3.svg" class="navicons">Categories</a></li>
         <li><a href = "index.php?sales_inventory"><img src="../uploads/sales4.svg" class="navicons">Sales Inventory</a></li>
         <li><a href = "index.php?add_products"><img src="../uploads/box.svg" class="navicons">Product Management</a></li>
         <li><a href = "index.php?viewall_products"><img src="../uploads/deliver.svg" class="navicons">Deliveries</a></li>
         <li><a href= "index.php?viewall_users"><img src="../uploads/coupon.svg" class="navicons">Coupons</a></li> 
-        <li><a href= "index.php?viewall_users"><img src="../uploads/user.svg" class="navicons">View All Users</a></li> 
+        <li><a href= "index.php?viewall_users"><img src="../uploads/user.svg" class="navicons">User Management</a></li> 
 
     </ul>
 </div>
@@ -29,6 +29,18 @@
     if(isset($_GET['cat']))
     {
         include("cat.php");
+    }
+    if(isset($_GET['donation_partners']))
+    {
+        include("donation_partners.php");
+    }
+    if(isset($_GET['ledger']))
+    {
+        include("ledger.php");
+    }
+    if(isset($_GET['manage_donation']))
+    {
+        include("manage_donation.php");
     }
     if(isset($_GET['sales_inventory']))
     {
