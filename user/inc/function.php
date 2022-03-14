@@ -1,6 +1,5 @@
 <?php
     session_start();
-
     function signUp()
     {
         include("inc/db.php");
@@ -88,34 +87,45 @@
     
             echo 
             "<form method = 'POST' enctype='multipart/form-data'>
-                <table>
-                    <tr>
-                        <td>Username: </td>
-                        <td><input type = 'text' name =  'user_username' value = '".$row['user_username']."' /></td>
-                    </tr>
-                    <tr>
-                        <td>Password: </td>
-                        <td><input type = 'password' name = 'user_password' value = '".$row['user_password']."' /></td>
-                    </tr>
-                    <tr>
-                        <td>Email: </td>
-                        <td><input type = 'email' name = 'user_email' value = '".$row['user_email']."' /></td>
-                    </tr>
-                    <tr>
-                        <td>Contact Number: </td>
-                        <td><input type = 'text' name = 'user_contactnumber' value = '".$row['user_contactnumber']."' /></td>
-                    </tr>
-                    <tr>
-                        <td>Profile Photo: </td>
-                        <td>
-                            <input type = 'file' name = 'user_profilephoto' />
-                            <img src = '../uploads/user_profile/".$row['user_profilephoto']."'  />
-                        </td>
+                <div class='profileTable'>
+                <div class = 'photo'>
+                    <img src = '../uploads/userIcon.svg'  />
+                    <input type = 'file' name = 'user_profilephoto' class = 'fileUpload' />
+                </div>
+                <p class='name'>User's Name</p>
+                <div class = 'contf'>
+                <div class='formt'>
+                    <div class='username'>
+                        <p class='us'>username </p>
+                        <input class='user_name'type = 'text' name =  'user_username' value = '".$row['user_username']."' />
+                    </div>
+                    <div class='username'>
+                        <p class = 'us'>password </p>
+                        <input class='user_name' type = 'password' name = 'user_password' value = '".$row['user_password']."' />
+                    </div>
+                    <div class = 'username'>
+                        <p class='us'>email </p>
+                        <input class='user_name' type = 'email' name = 'user_email' value = '".$row['user_email']."' />
+                    </div>
+                    <div class = 'username'>
+                        <p class = 'us'>Contact Number: </p>
+                        <input  class = 'user_name 'type = 'text' name = 'user_contactnumber' value = '".$row['user_contactnumber']."' />
+                    </div>
+                    <div class = 'usernameb'>
+                        <button name = 'update_user'>Update Profile</button>
+                    </div>
+                    <div class = 'usernameh'>
+                        <button class = 'back' onclick='window.location.href='/Pet/user/index.php'>Back to Home</button>
+                    </div>
+                    </div>
+                    <div class='rightSide'>
                         
-                    </tr>
-                </table>
-                <button name = 'update_user'>Update Profile</button>
-            </form>";
+                    </div>
+                    </div>
+                </div>
+                
+            </form>
+            ";
     
             if(isset($_POST['update_user']))
             {
@@ -217,17 +227,17 @@
                                 ".$row_pro['pro_name']."
                             </td>
                             <td>
-                                <input type = 'number' class = 'iquantity' name = 'pro_quantity' value = '".array_count_values($_SESSION['cart'])[$row_pro['pro_id']]."' min = '1' max = '100
+                                <input type = 'number'  class = 'quantity' name = 'pro_quantity' value = '".array_count_values($_SESSION['cart'])[$row_pro['pro_id']]."' min = '1' max = '100
                                 '/>
                                 <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id'/>
-                                <button id = 'pro_btn'>Update</button></a>
+                                <button id = 'pro_btn'>Update</button>
                             </td>
                             
-                            <td>
+                            <td  class = 'price'>
                                 ".$row_pro['pro_price']."
                             </td>
-                            <td>";
-                                $qty = $row_pro['pro_quantity'];
+                            <td class = 'sub_total'>";
+                                $qty = array_count_values($_SESSION['cart'])[$row_pro['pro_id']];
                                 $pro_price = $row_pro['pro_price'];
                                 $sub_total = $qty * $pro_price;
                                 echo $sub_total;
@@ -244,11 +254,21 @@
                             <td></td>
                             <td>
                                 <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'delete' />
-                                <button id = 'pro_btn'>Delete</button></a>
+                                <button id = 'pro_btn'>Delete</button>
                             </td>
                         </tr>
                     </form>";
             endwhile;
+
+            echo "<form method= 'GET' action = 'checkout.php'>
+                    <tr>
+                        <td>
+                            Total Amount: ".$net_total."
+                            <input type = 'hidden' name = 'totalprice' value = ".$net_total." />
+                            <button id = 'pro_btn'>Check Out</button>
+                        </td>
+                    </tr>
+                 </form>";
         }
         else
         {
@@ -259,18 +279,6 @@
                      <center><a href='/Pet/user/index.php'>Click Here to Buy a Product from our Store!</a></center>
                  </td>";
         }
-    }
-    
-    function delete_cart()
-    {
-        
-    }
-
-
-    function checkOut()
-    {
-        $_SESSION['message'] = 'You need to login to checkout';
-	    header('location: view_cart.php');
     }
     
     function dog_food_products()
@@ -530,3 +538,27 @@
         }
     }
 ?>
+
+<script>
+
+    var tp = 0;
+    var price = document.getElementsByClassName('price');
+    var quantity = document.getElementsByClassName('quantity');
+    var subtotal = document.getElementsByClassName('subtotal');
+    var total_price = document.getElementsByClassName('total_price');
+
+    function subTotal()
+    {
+        tp=0;
+        for(i=0;i<price.length;i++)
+        {
+            subtotal[i].innerText=(price[i].value)*(quantity[i].value);
+            tp=tp+(price[i].value)*(quantity[i].value);
+        }
+        total_price.innerText=tp;
+    }
+
+    subTotal();
+</script>
+
+
