@@ -1,5 +1,5 @@
 <?php 
-    include("inc/function.php");
+    include("includes/function.php");
     echo LogIn();
 ?>
 <html>
@@ -28,9 +28,9 @@
                 <form method = "POST" action="<?php echo $_SERVER['PHP_SELF']; ?>"; enctype = "multipart/form-data">
                  
                        
-                        <input class = "input" type="text" name = "user_username" placeholder = "Username"/>               
-                        <input class = "input"type="password" name = "user_password"  placeholder = "Password"/></br>
-                        <p>Or <a href = "/Pet/petcenter/login.php">Log in as Pet Center?</a></p>
+                        <input class = "input" type="text" name = "Username" placeholder = "Username"/>               
+                        <input class = "input"type="password" name = "Password"  placeholder = "Password"/></br>
+                        <p>Or <a href = "/Pet/admin/login.php">Log in as User?</a></p>
                             <button  class = "button" name = "login_user" id = "login_user" >LOGIN</button>
                             <button  class = "signup" name = "signup" id = "signup"><a href = "/Pet/user/signup.php">SIGNUP</a></button>
                         </br>
@@ -76,7 +76,7 @@
         }
         .inside{
             height: 100%;
-            width: 50%;
+            width: 100%;
             padding-top: 20px; 
         }
         .input{
@@ -135,24 +135,35 @@
        }
        @media (max-width: 800px){
            .container{
-               margin-left: 0%;
-               margin-right: 0%;
+               flex-direction: column;
+               margin-top: 0%;
+               height: 100vh;
+               width: 100vw;
+           }
+           .right{
+            background-image: linear-gradient(to bottom left, #5a5bf3, #91e7d9);
+               width:95%;
+               margin-left: 2.5%;
+               transform: translate(0, -180px);
+               border-radius: 10px;
+               height: 100vh;
+           }
+           .left{
+              height: 100vh;
                width: 100%;
            }
-       }
-       @media(max-height: 750px){
-           .container{
-               height: 500px;
+            form{
+               margin-left: 30px;
            }
-
-       }
-       @media(max-width: 500px){
-            .inside{
-                width: 90%;
-
+        }
+        @media (max-height: 700px){
+            .container{
+                height: 100vh;
             }
-       }
-
+            .right{
+                height: 500px;
+            }
+        }
     </style>
     <script>
             let input = document.querySelector(".input");
@@ -176,6 +187,3 @@
             }
         </script>
 </html>
-
-
-
