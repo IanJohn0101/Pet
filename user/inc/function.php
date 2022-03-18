@@ -1,45 +1,74 @@
 <?php
     session_start();
+
     function signUp()
     {
         include("inc/db.php");
-        if(isset($_POST['sign_up']))
+        
+        echo "<div id ='signUpForm'>
+        <div class='signUpForm'>
+            <h3>Registration</h3>
+                <form method = 'POST' enctype = 'multipart/form-data'>
+                    <table>
+                        <tr>
+                            <td>Name: </td>
+                            <td><input type='text' name = 'user_username' /></td>
+                        </tr>
+                        <tr>
+                            <td>Password: </td>
+                            <td><input type='text' name =  'user_password' /></td>
+                        </tr>
+                        <tr>
+                            <td>Email: </td>
+                            <td><input type='text' name =  'user_email' /></td>
+                        </tr>
+                        <tr>
+                            <td>Contact Number: </td>
+                            <td><input type='text' name =  'user_contactnumber' /></td>
+                        </tr>
+                        <tr>
+                            <td>Photo: </td>
+                            <td><input type='file' name =  'user_profilephoto' /></td>
+                        </tr>
+                    </table>
+                    <button name = 'add_user'>Register</button>
+                </form>
+            </div>
+        </div>";
+        if(isset($_POST['add_user']))
         {
             $user_username = $_POST['user_username'];
-            $user_pass = $_POST['user_pass'];
+            $user_password = $_POST['user_password'];
             $user_email = $_POST['user_email'];
-            $user_contact_number = $_POST['user_contact_number'];
+            $user_contactnumber = $_POST['user_contactnumber'];
 
-            $user_img = $_FILES['user_img']['name'];
-            $user_img_tmp = $_FILES['user_img']['tmp_name'];
+            $user_profilephoto = $_FILES['user_profilephoto']['name'];
+            $user_profilephoto_tmp = $_FILES['user_profilephoto']['tmp_name'];
+        
+            move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
 
-            move_uploaded_file($user_img_tmp,"../uploads/user_profile/$user_img");
-
-            $add_user = $con->prepare("INSERT INTO users_tbl
-            (
-                user_username, 
-                user_pass,
+            $add_user = $con->prepare("INSERT INTO users_table (
+                user_username,
+                user_password,
                 user_email,
-                user_contact_number,
-                user_img
+                user_contactnumber,
+                user_profilephoto
             ) 
-            VALUES
-            (
+            VALUES (
                 '$user_username',
-                '$user_pass',
+                '$user_password',
                 '$user_email',
-                '$user_contact_number',
-                '$user_img'
+                '$user_contactnumber',
+                '$user_profilephoto'
             )");
 
             if($add_user->execute())
             {
-                echo "<script>alert('Registration Successful!');</script>";
-                echo "<script>window.open('index.php','_self');</script>";
+                echo "<script>alert('Registration Successfull!');</script>"; 
             }
             else
             {
-                echo "<script>alert('Registration Failed!');</script>";
+                echo "<script>alert('Registration Unsuccessfull!');</script>";
             }
         }
     }
@@ -433,6 +462,45 @@
             ;            
         }
     }
+    function service_detail()
+    {
+        include("inc/db.php");
+
+        if(isset($_GET['cat_id']))
+        {
+            $pro_id = $_GET['cat_id'];
+            $pro_fetch=$con->prepare("SELECT * FROM services WHERE service_id = '$pro_id'");
+            $pro_fetch->setFetchMode(PDO:: FETCH_ASSOC);
+            $pro_fetch->execute();
+
+            $row_pro = $pro_fetch->fetch();
+            $cat_id = $row_pro['service_id'];
+            echo 
+                "<div id = 'pro_img'>
+                    <img src ='../uploads/user_profile/".$row_pro['service_photo']."'/>
+                </div>
+                <div id = 'services_name'>
+                    <label>Service Name: </label>
+                    <h3>".$row_pro['services_name']."</h3>
+                </div>
+                <div id = 'services_name'>
+                    <label>Location: </label>
+                    <h3>".$row_pro['service_loc']."</h3>
+                </div>
+                <div id = 'services_email'>
+                    <label>Email: </label>
+                    <h3>".$row_pro['service_email']."</h3>
+                </div>
+                <div id = 'services_name'>
+                    <label>Contact Number: </label>
+                    <h3>".$row_pro['service_contact_number']."</h3>
+                </div>
+                <div id = 'date_open'>
+                    <label>Date Open: </label>
+                    <h3>".$row_pro['service_date_open']."</h3>
+                </div>";
+        }
+    }
 
     function all_cat() 
     {
@@ -449,6 +517,40 @@
                   </li>";
         endwhile;
     }
+
+    function viewall_cat() 
+    {
+        include("inc/db.php");
+        $all_cat = $con->prepare("SELECT * FROM service_cat");
+        $all_cat->setFetchMode(PDO:: FETCH_ASSOC);
+        $all_cat->execute();
+
+        while($row=$all_cat->fetch()):
+            echo "<li>
+                    <a href = 'service_cat_detail.php?cat_id=".$row['cat_id']."'>
+                        ".$row['cat_name']."
+                    </a>
+                  </li>";
+        endwhile;
+    }
+
+    function all_services()
+    {
+        include("inc/db.php");
+        $all_services = $con->prepare("SELECT * FROM services");
+        $all_services->setFetchMode(PDO:: FETCH_ASSOC);
+        $all_services->execute();
+
+        while($row=$all_services->fetch()):
+            echo "<li>
+                    <a href = 'services_detail.php?service_id=".$row['service_id']."'>
+                        ".$row['services_name']."
+                    </a>
+                  </li>";
+        endwhile;
+    }
+
+    
 
     function cat_detail()
     {
@@ -492,6 +594,45 @@
             endwhile;
         }
     }
+    function service_cat_detail()
+    {
+        include("inc/db.php");
+
+        if(isset($_GET['cat_id']))
+        {
+            //service_cat
+            $cat_id = $_GET['cat_id'];
+            $cat_pro = $con->prepare("SELECT * FROM services where service_id = '$cat_id'");
+            $cat_pro->setFetchMode(PDO:: FETCH_ASSOC);
+            $cat_pro->execute();
+            
+            //services
+            $fetch_cat_name = $con->prepare("SELECT * FROM service_cat WHERE cat_id='$cat_id'");
+            $fetch_cat_name->setFetchMode(PDO:: FETCH_ASSOC);
+            $fetch_cat_name->execute();
+    
+            $row_cat=$fetch_cat_name->fetch();
+            $cat_id = $row_cat['cat_id'];
+            echo"<h3>".$row_cat['cat_name']."</h3>";
+
+            while($row_cat = $cat_pro->fetch()):
+                echo"
+                    <li>
+                        <a href='service_detail.php?cat_id=".$row_cat['service_id']."'>
+                            <h4>".$row_cat['services_name']."</h4>
+                            <img src ='../uploads/user_profile/".$row_cat['service_photo']."' />
+                            <center>
+                                <button id = 'pro_btn'>
+                                    <a href = 'services_detail.php?cat_id=".$row_cat['service_id']."'>View</a>
+                                </button>
+                            </center>
+                        </a>
+                    </li>
+                    ";
+            endwhile;
+        }
+    }
+
 
     function search() {
         include("inc/db.php");
