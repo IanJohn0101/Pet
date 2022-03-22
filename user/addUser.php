@@ -1,4 +1,4 @@
 <?php
     include("inc/function.php");
-    echo signUp();
+    call_user_func('signUp');
 ?>

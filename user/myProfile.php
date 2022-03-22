@@ -1,11 +1,19 @@
-<?php
-    include("inc/function.php");
-    echo myProfile();
-?>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
- <style>
+<body>
+    <div class="conts">
+    <?php
+    include("inc/function.php");
+    call_user_func('myProfile');
+?>
+    </div>
+</body>
+</html>
+
+<style>
             *{
                 margin: 0;
                 padding: 0;
@@ -148,6 +156,12 @@
                            display: none;
                        }
 
-
+                    }
 
             </style>
+            <script>
+                 const addEvent = document.getElementById('backHome');
+                 addEvent.addEventListener("click", function(){
+                 console.log("okoko");
+                 })
+            </script>

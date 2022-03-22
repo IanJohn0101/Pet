@@ -4,35 +4,54 @@
     function signUp()
     {
         include("inc/db.php");
-        
-        echo "<div id ='signUpForm'>
+
+        echo "
         <div class='signUpForm'>
-            <h3>Registration</h3>
+        <div id = 'reg'>
+            <h3 id = regist>Register</h3>
+        </div>
+        <div id = 'frm'>
                 <form method = 'POST' enctype = 'multipart/form-data'>
-                    <table>
-                        <tr>
-                            <td>Name: </td>
-                            <td><input type='text' name = 'user_username' /></td>
-                        </tr>
-                        <tr>
-                            <td>Password: </td>
-                            <td><input type='text' name =  'user_password' /></td>
-                        </tr>
-                        <tr>
-                            <td>Email: </td>
-                            <td><input type='text' name =  'user_email' /></td>
-                        </tr>
-                        <tr>
-                            <td>Contact Number: </td>
-                            <td><input type='text' name =  'user_contactnumber' /></td>
-                        </tr>
-                        <tr>
-                            <td>Photo: </td>
-                            <td><input type='file' name =  'user_profilephoto' /></td>
-                        </tr>
-                    </table>
-                    <button name = 'add_user'>Register</button>
+                    <div class= 'data'>
+                        <div class = 'fieldCont'>
+                            <p>Name: </p>
+                            <input type='text' name = 'user_username' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Address: </p>
+                            <input type='text' name =  'user_address' />
+                        </div>   
+                        
+                        <div class = 'fieldCont'>
+                            <p>Email: </p>
+                            <input type='text' name =  'user_email' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Contact Number: </p>
+                            <input type='text' name =  'user_contactnumber' />
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Password: </p>
+                            <input type='text' name =  'user_password' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Confirm Password: </p>
+                            <input type='text' name =  'user_password' required/>
+                        </div>
+                        <div class = 'fieldContbtn'>
+                        <br><br>
+                        <button id='cancelBtn'>Cancel</button>
+                        
+                        </div>
+                        <div class = 'fieldContbtn'>
+                        <br><br>
+                        <button name = 'add_user' id='regBtn'>Register</button>
+                        </div>
+                       
+                    </div>
+                   
                 </form>
+                </div>
             </div>
         </div>";
         
@@ -48,7 +67,7 @@
         
             move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
 
-            $add_user = $con->prepare("INSERT INTO users_table(
+            $add_users = $con->prepare("INSERT INTO users_table (
                 user_username,
                 user_password,
                 user_email,
@@ -63,7 +82,7 @@
                 '$user_profilephoto'
             )");
 
-            if($add_user->execute())
+            if($add_users->execute())
             {
                 echo "<script>alert('Registration Successfull!');</script>"; 
             }
@@ -145,7 +164,7 @@
                         <button name = 'update_user'>Update Profile</button>
                     </div>
                     <div class = 'usernameh'>
-                        <button class = 'back' onclick='window.location.href='/Pet/user/index.php'>Back to Home</button>
+                        <button class = 'back' id = 'backHome'><a href = '/Pet/user/index.php'>Back to Home</a></button>
                     </div>
                     </div>
                     <div class='rightSide'>
@@ -300,10 +319,7 @@
                     </tr>
                  </form>";
 
-                 if(isset($_GET['orders']))
-                 {
-                     include("checkout.php");
-                 }
+                 
         }
         else
         {
