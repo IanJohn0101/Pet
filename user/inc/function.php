@@ -4,35 +4,54 @@
     function signUp()
     {
         include("inc/db.php");
-        
-        echo "<div id ='signUpForm'>
+
+        echo "
         <div class='signUpForm'>
-            <h3>Registration</h3>
+        <div id = 'reg'>
+            <h3 id = regist>Register</h3>
+        </div>
+        <div id = 'frm'>
                 <form method = 'POST' enctype = 'multipart/form-data'>
-                    <table>
-                        <tr>
-                            <td>Name: </td>
-                            <td><input type='text' name = 'user_username' /></td>
-                        </tr>
-                        <tr>
-                            <td>Password: </td>
-                            <td><input type='text' name =  'user_password' /></td>
-                        </tr>
-                        <tr>
-                            <td>Email: </td>
-                            <td><input type='text' name =  'user_email' /></td>
-                        </tr>
-                        <tr>
-                            <td>Contact Number: </td>
-                            <td><input type='text' name =  'user_contactnumber' /></td>
-                        </tr>
-                        <tr>
-                            <td>Photo: </td>
-                            <td><input type='file' name =  'user_profilephoto' /></td>
-                        </tr>
-                    </table>
-                    <button name = 'add_user'>Register</button>
+                    <div class= 'data'>
+                        <div class = 'fieldCont'>
+                            <p>Name: </p>
+                            <input type='text' name = 'user_username' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Address: </p>
+                            <input type='text' name =  'user_address' />
+                        </div>   
+                        
+                        <div class = 'fieldCont'>
+                            <p>Email: </p>
+                            <input type='text' name =  'user_email' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Contact Number: </p>
+                            <input type='text' name =  'user_contactnumber' />
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Password: </p>
+                            <input type='text' name =  'user_password' required/>
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Confirm Password: </p>
+                            <input type='text' name =  'user_password' required/>
+                        </div>
+                        <div class = 'fieldContbtn'>
+                        <br><br>
+                        <button id='cancelBtn'>Cancel</button>
+                        
+                        </div>
+                        <div class = 'fieldContbtn'>
+                        <br><br>
+                        <button name = 'add_user' id='regBtn'>Register</button>
+                        </div>
+                       
+                    </div>
+                   
                 </form>
+                </div>
             </div>
         </div>";
         
@@ -48,7 +67,7 @@
         
             move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
 
-            $add_user = $con->prepare("INSERT INTO users_table(
+            $add_users = $con->prepare("INSERT INTO users_table (
                 user_username,
                 user_password,
                 user_email,
@@ -63,7 +82,7 @@
                 '$user_profilephoto'
             )");
 
-            if($add_user->execute())
+            if($add_users->execute())
             {
                 echo "<script>alert('Registration Successfull!');</script>"; 
             }
@@ -145,7 +164,7 @@
                         <button name = 'update_user'>Update Profile</button>
                     </div>
                     <div class = 'usernameh'>
-                        <button class = 'back' onclick='window.location.href='/Pet/user/index.php'>Back to Home</button>
+                        <button class = 'back' id = 'backHome'><a href = '/Pet/user/index.php'>Back to Home</a></button>
                     </div>
                     </div>
                     <div class='rightSide'>
@@ -286,6 +305,7 @@
 
             endwhile;
 
+
             echo "<form method= 'GET' action = '/Pet/user/index.php?orders'>
                     <tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
                         <td colspan = '4' style='border: none;'></td>
@@ -299,10 +319,7 @@
                     </tr>
                  </form>";
 
-                 if(isset($_GET['orders']))
-                 {
-                     include("checkout.php");
-                 }
+                 
         }
         else
         {
@@ -318,6 +335,36 @@
                  </td>
             </div>";
         }
+    }
+
+    function view_orders()
+    {
+        include("inc/db.php");
+        
+        if(isset($_GET['user_id']))
+        {
+            $uID = $_GET['user_id'];
+            $display_order = $con->prepare("SELECT * FROM order_tbl WHERE user_id = '$uID'");
+            $display_order->setFetchMode(PDO:: FETCH_ASSOC);
+            $display_order->execute(); 
+
+            while($row_order = $display_order->fetch()):
+
+            $pro_id = $row_order['pro_id'];
+            $display_prod = $con->prepare("SELECT * FROM product_tbl WHERE pro_id = '$pro_id'");
+            $display_prod->setFetchMode(PDO:: FETCH_ASSOC);
+            $display_prod->execute();
+
+            $row_prod = $display_prod->fetch();
+            echo 
+            "<tr>
+                <td>".$row_prod['pro_name']."</td>
+                <td>".$row_order['qty']."</td>
+                <td>".$row_order['total_amount']."</td>
+                <td>Cancel</td>
+            </tr>";
+           endwhile;
+        }    
     }
     
     function dog_food_products()
@@ -681,26 +728,5 @@
     }
 ?>
 
-<script>
-
-    var tp = 0;
-    var price = document.getElementsByClassName('price');
-    var quantity = document.getElementsByClassName('quantity');
-    var subtotal = document.getElementsByClassName('subtotal');
-    var total_price = document.getElementsByClassName('total_price');
-
-    function subTotal()
-    {
-        tp=0;
-        for(i=0;i<price.length;i++)
-        {
-            subtotal[i].innerText=(price[i].value)*(quantity[i].value);
-            tp=tp+(price[i].value)*(quantity[i].value);
-        }
-        total_price.innerText=tp;
-    }
-
-    subTotal();
-</script>
 
 
