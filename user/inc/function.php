@@ -1,45 +1,75 @@
 <?php
     session_start();
+
     function signUp()
     {
         include("inc/db.php");
-        if(isset($_POST['sign_up']))
+        
+        echo "<div id ='signUpForm'>
+        <div class='signUpForm'>
+            <h3>Registration</h3>
+                <form method = 'POST' enctype = 'multipart/form-data'>
+                    <table>
+                        <tr>
+                            <td>Name: </td>
+                            <td><input type='text' name = 'user_username' /></td>
+                        </tr>
+                        <tr>
+                            <td>Password: </td>
+                            <td><input type='text' name =  'user_password' /></td>
+                        </tr>
+                        <tr>
+                            <td>Email: </td>
+                            <td><input type='text' name =  'user_email' /></td>
+                        </tr>
+                        <tr>
+                            <td>Contact Number: </td>
+                            <td><input type='text' name =  'user_contactnumber' /></td>
+                        </tr>
+                        <tr>
+                            <td>Photo: </td>
+                            <td><input type='file' name =  'user_profilephoto' /></td>
+                        </tr>
+                    </table>
+                    <button name = 'add_user'>Register</button>
+                </form>
+            </div>
+        </div>";
+        
+        if(isset($_POST['add_user']))
         {
             $user_username = $_POST['user_username'];
-            $user_pass = $_POST['user_pass'];
+            $user_password = $_POST['user_password'];
             $user_email = $_POST['user_email'];
-            $user_contact_number = $_POST['user_contact_number'];
+            $user_contactnumber = $_POST['user_contactnumber'];
 
-            $user_img = $_FILES['user_img']['name'];
-            $user_img_tmp = $_FILES['user_img']['tmp_name'];
+            $user_profilephoto = $_FILES['user_profilephoto']['name'];
+            $user_profilephoto_tmp = $_FILES['user_profilephoto']['tmp_name'];
+        
+            move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
 
-            move_uploaded_file($user_img_tmp,"../uploads/user_profile/$user_img");
-
-            $add_user = $con->prepare("INSERT INTO users_tbl
-            (
-                user_username, 
-                user_pass,
+            $add_user = $con->prepare("INSERT INTO users_table(
+                user_username,
+                user_password,
                 user_email,
-                user_contact_number,
-                user_img
+                user_contactnumber,
+                user_profilephoto
             ) 
-            VALUES
-            (
+            VALUES (
                 '$user_username',
-                '$user_pass',
+                '$user_password',
                 '$user_email',
-                '$user_contact_number',
-                '$user_img'
+                '$user_contactnumber',
+                '$user_profilephoto'
             )");
 
             if($add_user->execute())
             {
-                echo "<script>alert('Registration Successful!');</script>";
-                echo "<script>window.open('index.php','_self');</script>";
+                echo "<script>alert('Registration Successfull!');</script>"; 
             }
             else
             {
-                echo "<script>alert('Registration Failed!');</script>";
+                echo "<script>alert('Registration Unsuccessfull!');</script>";
             }
         }
     }
@@ -209,9 +239,9 @@
             $display_cart->execute();
             
             echo "<table cellpadding='0' cellspacing = '0'>
-                             <tr>
-                                 <th>Image</th>
-                                 <th>Product Name</th>
+                             <tr class='headerTitle'>
+                                 <th style='width:10%'>Image</th>
+                                 <th style='width:30%'>Product Name</th>
                                  <th>Quantity</th>
                                  <th>Price</th>
                                  <th>Sub Total</th>
@@ -219,70 +249,75 @@
                              </tr>";
             while($row_pro = $display_cart->fetch()):
                 echo "<form method = 'GET' action = '/Pet/user/update_cart_qty.php' enctype = 'multipart/form-data'>
-                        <tr>
+                        <tr class ='data'>
                             <td>
-                            <img src = '../uploads/products/".$row_pro['pro_img']."'  />
+                            <img src = '../uploads/products/".$row_pro['pro_img']."' />
+                            </td>
+                            <td class = 'productNem'>
+                               <p> ".$row_pro['pro_name']."</p>
                             </td>
                             <td>
-                                ".$row_pro['pro_name']."
-                            </td>
-                            <td>
-                                <input type = 'number' class = 'iquantity' name = 'pro_quantity' value = '".array_count_values($_SESSION['cart'])[$row_pro['pro_id']]."' min = '1' max = '100
+                                <input type = 'number'  class = 'quantity' name = 'pro_quantity' value = '".array_count_values($_SESSION['cart'])[$row_pro['pro_id']]."' min = '1' max = '100
                                 '/>
                                 <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id'/>
-                                <button id = 'pro_btn'>Update</button></a>
+                                <button id = 'pro_btn'>Update</button>
                             </td>
                             
-                            <td>
+                            <td  class = 'price'>
                                 ".$row_pro['pro_price']."
                             </td>
-                            <td>";
-                                $qty = $row_pro['pro_quantity'];
+                            <td class = 'sub_total'>";
+                                $qty = array_count_values($_SESSION['cart'])[$row_pro['pro_id']];
                                 $pro_price = $row_pro['pro_price'];
                                 $sub_total = $qty * $pro_price;
                                 echo $sub_total;
                                 $net_total = $net_total + $sub_total;
-                            echo "</td>
-                        </tr>
-                    </form>";
-                    echo "<form method = 'GET' action = '/Pet/user/delete_cart.php' enctype = 'multipart/form-data'>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+
+                            echo "</td></form>
+                           
+                            <form method = 'GET' action = '/Pet/user/delete_cart.php' enctype = 'multipart/form-data'>
                             <td>
-                                <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'delete' />
-                                <button id = 'pro_btn'>Delete</button></a>
+                            <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'delete' />
+                            <button id = 'pro_btndelete'><img src = '../uploads/delete 1.svg' class='delete'></button></a>
                             </td>
+                            </form>    
                         </tr>
                     </form>";
-                    
+
             endwhile;
+
+            echo "<form method= 'GET' action = '/Pet/user/index.php?orders'>
+                    <tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
+                        <td colspan = '4' style='border: none;'></td>
+                        <td style='color:#444; border: none;'>
+                            Total Amount: ".$net_total."
+                            <input type = 'hidden' name = 'totalprice' value = ".$net_total." />
+                            </td>
+                            <td style='border: none;'>
+                            <button id = 'pro_btn' style='width: 90%;margin-top: 15px;'>Place Order</button>
+                        </td>
+                    </tr>
+                 </form>";
+
+                 if(isset($_GET['orders']))
+                 {
+                     include("checkout.php");
+                 }
         }
         else
         {
-            echo "<td>
-                    <h2><center>Your cart is empty!</center</h2
+            echo "
+            <div class='emptyCart'>
+            <img src = '../uploads/empty.svg' class = 'emptyImage'>
+                <td>
+                    <p id = 'cartText'><center>Your cart is empty!</p>
                  </td>
+                 </br>
                  <td>
-                     <center><a href='/Pet/user/index.php'>Click Here to Buy a Product from our Store!</a></center>
-                 </td>";
+                    <a id = 'linkEmpty'href='/Pet/user/index.php'>Click Here to Buy a Product from our Store!</a>
+                 </td>
+            </div>";
         }
-    }
-    
-    function delete_cart()
-    {
-        
-    }
-
-
-
-    function checkOut()
-    {
-        $_SESSION['message'] = 'You need to login to checkout';
-	    header('location: view_cart.php');
     }
     
     function dog_food_products()
@@ -303,26 +338,26 @@
 
         while($row_pro = $fetch_pro->fetch()):
             echo"
+            
                 <li>
                     <form method = 'post' enctype='multipart/form-data'>
                     <a href='pro_detail.php?pro_id=".$row_pro['pro_id']."'>
                         <h4>".$row_pro['pro_name']."</h4>
                         <img src ='../uploads/products/".$row_pro['pro_img']."' />
                         <center>
-                            <button id = 'pro_btn'>
+                            <button id = 'pro_btnView'>
                                 <a href = 'pro_detail.php?pro_id=".$row_pro['pro_id']."'>View</a>
                             </button>
                             <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id' />
                             <button id = 'pro_btn' name = 'cart_btn'>
                             Cart
                             </button>
-                            <button id = 'pro_btn'>
-                                <a href = '#'>Wishlist</a>
-                            </button>
+                           
                         </center>
                     </a>
                     </form>
                 </li>
+            
                 ";
         endwhile;
     }
@@ -357,9 +392,7 @@
                             <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id' />
                             <button id = 'pro_btn' name = 'cart_btn'>Cart
                             </button>
-                            <button id = 'pro_btn'>
-                                <a href = '#'>Wishlist</a>
-                            </button>
+                            
                         </center>
                     </a>
                     </form>
@@ -440,6 +473,45 @@
             ;            
         }
     }
+    function service_detail()
+    {
+        include("inc/db.php");
+
+        if(isset($_GET['cat_id']))
+        {
+            $pro_id = $_GET['cat_id'];
+            $pro_fetch=$con->prepare("SELECT * FROM services WHERE service_id = '$pro_id'");
+            $pro_fetch->setFetchMode(PDO:: FETCH_ASSOC);
+            $pro_fetch->execute();
+
+            $row_pro = $pro_fetch->fetch();
+            $cat_id = $row_pro['service_id'];
+            echo 
+                "<div id = 'pro_img'>
+                    <img src ='../uploads/user_profile/".$row_pro['service_photo']."'/>
+                </div>
+                <div id = 'services_name'>
+                    <label>Service Name: </label>
+                    <h3>".$row_pro['services_name']."</h3>
+                </div>
+                <div id = 'services_name'>
+                    <label>Location: </label>
+                    <h3>".$row_pro['service_loc']."</h3>
+                </div>
+                <div id = 'services_email'>
+                    <label>Email: </label>
+                    <h3>".$row_pro['service_email']."</h3>
+                </div>
+                <div id = 'services_name'>
+                    <label>Contact Number: </label>
+                    <h3>".$row_pro['service_contact_number']."</h3>
+                </div>
+                <div id = 'date_open'>
+                    <label>Date Open: </label>
+                    <h3>".$row_pro['service_date_open']."</h3>
+                </div>";
+        }
+    }
 
     function all_cat() 
     {
@@ -456,6 +528,40 @@
                   </li>";
         endwhile;
     }
+
+    function viewall_cat() 
+    {
+        include("inc/db.php");
+        $all_cat = $con->prepare("SELECT * FROM service_cat");
+        $all_cat->setFetchMode(PDO:: FETCH_ASSOC);
+        $all_cat->execute();
+
+        while($row=$all_cat->fetch()):
+            echo "<li>
+                    <a href = 'service_cat_detail.php?cat_id=".$row['cat_id']."'>
+                        ".$row['cat_name']."
+                    </a>
+                  </li>";
+        endwhile;
+    }
+
+    function all_services()
+    {
+        include("inc/db.php");
+        $all_services = $con->prepare("SELECT * FROM services");
+        $all_services->setFetchMode(PDO:: FETCH_ASSOC);
+        $all_services->execute();
+
+        while($row=$all_services->fetch()):
+            echo "<li>
+                    <a href = 'services_detail.php?service_id=".$row['service_id']."'>
+                        ".$row['services_name']."
+                    </a>
+                  </li>";
+        endwhile;
+    }
+
+    
 
     function cat_detail()
     {
@@ -483,14 +589,50 @@
                             <h4>".$row_cat['pro_name']."</h4>
                             <img src ='../uploads/products/".$row_cat['pro_img']."' />
                             <center>
-                                <button id = 'pro_btn'>
+                                <button id = 'pro_btnView'>
                                     <a href = 'pro_detail.php?pro_id=".$row_cat['pro_id']."'>View</a>
                                 </button>
-                                <button id = 'pro_btn'>
-                                    <a href = '#'>Cart</a>
+                                <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id' />
+                                <button id = 'pro_btn' name = 'cart_btn'>Cart
                                 </button>
+                                
+                            </center>
+                        </a>
+                    </li>
+                    ";
+            endwhile;
+        }
+    }
+    function service_cat_detail()
+    {
+        include("inc/db.php");
+
+        if(isset($_GET['cat_id']))
+        {
+            //service_cat
+            $cat_id = $_GET['cat_id'];
+            $cat_pro = $con->prepare("SELECT * FROM services where service_id = '$cat_id'");
+            $cat_pro->setFetchMode(PDO:: FETCH_ASSOC);
+            $cat_pro->execute();
+            
+            //services
+            $fetch_cat_name = $con->prepare("SELECT * FROM service_cat WHERE cat_id='$cat_id'");
+            $fetch_cat_name->setFetchMode(PDO:: FETCH_ASSOC);
+            $fetch_cat_name->execute();
+    
+            $row_cat=$fetch_cat_name->fetch();
+            $cat_id = $row_cat['cat_id'];
+            echo"<h3>".$row_cat['cat_name']."</h3>";
+
+            while($row_cat = $cat_pro->fetch()):
+                echo"
+                    <li>
+                        <a href='service_detail.php?cat_id=".$row_cat['service_id']."'>
+                            <h4>".$row_cat['services_name']."</h4>
+                            <img src ='../uploads/user_profile/".$row_cat['service_photo']."' />
+                            <center>
                                 <button id = 'pro_btn'>
-                                    <a href = '#'>Wishlist</a>
+                                    <a href = 'services_detail.php?cat_id=".$row_cat['service_id']."'>View</a>
                                 </button>
                             </center>
                         </a>
@@ -499,6 +641,7 @@
             endwhile;
         }
     }
+
 
     function search() {
         include("inc/db.php");
@@ -518,21 +661,16 @@
             {
                 while($row=$search->fetch()):
                     echo"
+                    </br>
                         <li>
                             <a href='pro_detail.php?pro_id=".$row['pro_id']."'>
                                 <h4>".$row['pro_name']."</h4>
                                 <img src ='./uploads/products/".$row['pro_img']."' />
                                 <center>
-                                    <button id = 'pro_btn'>
-                                        <a href = 'pro_detail.php?pro_id=".$row['pro_id']."'>View</a>
-                                    </button>
-                                    <button id = 'pro_btn' name = 'cart_btn'>
-                                    Cart
-                                    </button>
-                                    <button id = 'pro_btn'>
-                                        <a href = '#'>Wishlist</a>
-                                    </button>
-                                </center>
+                                <button id = 'pro_btnView'>
+                                <a href = 'pro_detail.php?pro_id=".$row['pro_id']."'>View</a>
+                            </button>
+                             </center>
                             </a>
                         </li>
                         ";
@@ -542,3 +680,27 @@
         }
     }
 ?>
+
+<script>
+
+    var tp = 0;
+    var price = document.getElementsByClassName('price');
+    var quantity = document.getElementsByClassName('quantity');
+    var subtotal = document.getElementsByClassName('subtotal');
+    var total_price = document.getElementsByClassName('total_price');
+
+    function subTotal()
+    {
+        tp=0;
+        for(i=0;i<price.length;i++)
+        {
+            subtotal[i].innerText=(price[i].value)*(quantity[i].value);
+            tp=tp+(price[i].value)*(quantity[i].value);
+        }
+        total_price.innerText=tp;
+    }
+
+    subTotal();
+</script>
+
+
