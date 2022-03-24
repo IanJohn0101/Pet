@@ -223,8 +223,10 @@
     {
         if(isset($_POST['cart_btn']))
         {
-            array_push( $_SESSION['cart'], $_POST['pro_id']);
-            echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+           array_push( $_SESSION['cart'], $_POST['pro_id']);
+           echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+
+           
         }
        
     }
@@ -302,11 +304,10 @@
                             </form>    
                         </tr>
                     </form>";
-
             endwhile;
 
 
-            echo "<form method= 'GET' action = '/Pet/user/index.php?orders'>
+            echo "<form method= 'GET' action = 'checkout.php'>
                     <tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
                         <td colspan = '4' style='border: none;'></td>
                         <td style='color:#444; border: none;'>
@@ -314,10 +315,16 @@
                             <input type = 'hidden' name = 'totalprice' value = ".$net_total." />
                             </td>
                             <td style='border: none;'>
-                            <button id = 'pro_btn' style='width: 90%;margin-top: 15px;'>Place Order</button>
+                            <button name = 'placeOrder' id = 'pro_btns' style='width: 90%;margin-top: 15px;'>Place Order</button>
                         </td>
                     </tr>
                  </form>";
+                 if(isset($_POST['placeOrder'])){
+                  echo  '<script>
+                        console.log("ok");
+                  </script>';
+                }
+
 
                  
         }
@@ -497,7 +504,11 @@
                             <button name = 'cart_btn'>Add to Cart</button>
                         </form>
                     </center>
-                </div><br clear = 'all'>    
+                </div><br clear = 'all'>";
+                    if(isset($_POST)){
+// asdsdsssss////////////////////////
+                    }
+                echo"
                 <div id = 'sim_pro'>
                     <h3>Related Products</h3>
                     <ul>";
@@ -727,6 +738,4 @@
         }
     }
 ?>
-
-
 

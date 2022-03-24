@@ -1,6 +1,7 @@
 <html>
     <head>
-
+    <link rel="stylesheet" href="css/orders.css">
+    <script src="js/orders.js"></script>
     </head>
     <body>
         <div class="main">
@@ -10,7 +11,7 @@
                 <a id= "orderBtnid"onclick = "orderBtn()"><img src = "../uploads/orderIcon.svg" style = "margin-right: 10px;height: 20px; width: 20px;">Orders</a>
             </div>
             <div class="purchase">
-            <a id = "pur" onclick = "purBtn()"><img src = "../uploads/buy.svg" style = "margin-right: 10px;height: 20px; width: 20px;">Purchase</a>
+            <a id = "pur" onclick = "purBtn()"><img src = "../uploads/buy.svg" style = "margin-right: 10px;height: 20px; width: 20px;">To Deliver</a>
             </div>
             <div class="transactions">
             <a id = "trans" onclick = "transBtn()" ><img src = "../uploads/deal.svg" style = "margin-right: 10px;height: 20px; width: 20px;">Transactions</a>
@@ -18,16 +19,9 @@
         </div>
        
         <div class="right">
-
            <div id="ordersCont">
            <?php
     session_start();
-    if(!isset($_SESSION['user_username']))
-    {
-        header("Location: login.php");
-    }
-    else
-    {
         include("inc/db.php");
         $user_id = $_SESSION['user_username'];
         $fetch_user_username = $con->prepare("SELECT * FROM users_table WHERE user_username = '$user_id'");
@@ -130,143 +124,10 @@
                 echo "<script>alert('Unsuccessful!');</script>";
             }
         }
-    }
+
 ?>
-
            </div>
-
-
-        </div>
-        
-        </div>
-       
+        </div>  
+        </div>      
     </body>
-    <style>
-        body{
-            
-        }
-        .left{
-            width: 15vw;
-            height: 85vh;
-            background: white;
-            display: inline-flex;
-           margin-left: 10px;
-           margin-top: 30px;
-            flex-direction: column;
-        }
-        .right{
-            width: 80vw;
-            background: #eee;
-            height: 80vh;
-            margin-top: 10px;
-            border-radius: 10px;
-
-        }
-        .main{
-            display: flex;
-        }
-        .ordersBtn{
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-      
-        }
-        .ordersBtn a{
-            color: #444;
-            background: #5AF3A6;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            width: 80%;
-            text-align: left;
-            padding-left: 10px;
-            border-radius: 7px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .ordersBtn a:hover{
-            background: #5AF3A6;
-            transition: .8s;
-        }
-        .purchase{
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-      
-        }
-        .purchase a{
-            color: #777;
-            background: #fff;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            width: 80%;
-            text-align: left;
-            padding-left: 10px;
-            border-radius: 7px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        }
-        .purchase a:hover{
-            background: #5AF3A6;
-            transition: .8s;
-        }
-        
-        .transactions{
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-      
-        }
-        .transactions a{
-            color: #777;
-            background: #fff;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            width: 80%;
-            text-align: left;
-            padding-left: 10px;
-            border-radius: 7px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        }
-        .transactions a:hover{
-            background: #5AF3A6;
-            transition: .8s;
-        }
-        .right{
-            padding: 10px;
-        }
-        
-    </style>
-    <script>
-        function orderBtn() {
-         document.getElementById("orderBtnid").style.background = "#5AF3A6";
-         document.getElementById("orderBtnid").style.color = "black";
-         document.getElementById("pur").style.color = "#777";
-         document.getElementById("trans").style.color = "#777";
-         document.getElementById("pur").style.background = "white";
-         document.getElementById("trans").style.background = "white";
-
-         document.getElementById("ordersCont").style.display = "inline";
-        }
-
-        function purBtn() {
-         document.getElementById("orderBtnid").style.background = "white";
-         
-         document.getElementById("pur").style.background = "#5AF3A6";
-         document.getElementById("pur").style.color = "black";
-         document.getElementById("orderBtnid").style.color = "#777";
-         document.getElementById("trans").style.color = "#777";
-         document.getElementById("trans").style.background = "white";
-
-         document.getElementById("ordersCont").style.display = "none";
-        }
-        function transBtn() {
-         document.getElementById("orderBtnid").style.background = "white";
-         document.getElementById("pur").style.background = "white";
-         document.getElementById("trans").style.background = "#5AF3A6";
-         document.getElementById("trans").style.color = "black";
-         document.getElementById("orderBtnid").style.color = "#777";
-         document.getElementById("pur").style.color = "#777";
-
-         document.getElementById("ordersCont").style.display = "none";
-        }
-    </script>
 </html>

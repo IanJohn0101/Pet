@@ -262,11 +262,12 @@
   padding: 10px;
   height: 25px;
   float: left;
+  font-family: "Varela Round", sans-serif;
 }
 
 #navbar ul li a {
   font-size: 14px;
-  font-family: "Fredoka", sans-serif;
+  font-family: "Varela Round", sans-serif;
   text-decoration: none;
 }
 #navbar ul li a:active {
@@ -307,7 +308,7 @@
 }
 #navbar a {
   color: #fff;
-  font-family: "Varela Round", sans-serif;
+  font-family: "calibi";
   font-size: 14px;
 }
 
@@ -378,7 +379,21 @@ h4 {
   color: white;
 }
 
+#pro_btns {
+  width: 30%;
+  height: 30px;
+  background: #5a5bf3;
+  border-radius: 3px;
+  border: 1px solid #5a5bf3;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  color: white;
+}
+
 #pro_btn:hover {
+  background: #4343ba;
+}
+#pro_btns:hover {
   background: #4343ba;
 }
 

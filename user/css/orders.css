@@ -1,0 +1,86 @@
+body {
+}
+.left {
+  width: 15vw;
+  height: 80vh;
+  background: white;
+  display: inline-flex;
+  margin-left: 10px;
+  padding-top: 30px;
+  flex-direction: column;
+}
+.right {
+  width: 80vw;
+  background: #eee;
+  height: 80vh;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+.main {
+  display: flex;
+}
+.ordersBtn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.ordersBtn a {
+  color: #444;
+  background: #5af3a6;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 80%;
+  text-align: left;
+  padding-left: 10px;
+  border-radius: 7px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+.ordersBtn a:hover {
+  background: #5af3a6;
+  transition: 0.8s;
+}
+.purchase {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.purchase a {
+  color: #777;
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 80%;
+  text-align: left;
+  padding-left: 10px;
+  border-radius: 7px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+.purchase a:hover {
+  background: #5af3a6;
+  transition: 0.8s;
+}
+
+.transactions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.transactions a {
+  color: #777;
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 80%;
+  text-align: left;
+  padding-left: 10px;
+  border-radius: 7px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+.transactions a:hover {
+  background: #5af3a6;
+  transition: 0.8s;
+}
+.right {
+  padding: 10px;
+}

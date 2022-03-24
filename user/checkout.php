@@ -29,6 +29,7 @@
                     <td><input type = 'hidden' name = 'pro_id' value = ".$row['pro_id']." /></td>
                     <td>".$row['pro_name']."</td><br>
                 </tr>";
+                console.log("ok");
         endwhile;
             echo"
                 <tr>
@@ -68,7 +69,7 @@
                     <td>".$row_user['user_email']."</td><br>
                 </tr>
                 <tr>
-                    <td><button name = 'place_order'>Place Order</button></td>
+                    <td><button name = 'place_order'>Confirm Order</button></td>
                 </tr>
                 <tr>
                     <td><a href = 'index.php'>Go Home</a></td>

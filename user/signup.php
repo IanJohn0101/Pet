@@ -1,126 +1,106 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel = "stylesheet" href = "css/signup.css"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400&family=Nunito:wght@200&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Rubik:wght@500&family=Varela+Round&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Palette+Mosaic&family=Rubik:wght@500&family=Varela+Round&display=swap" rel="stylesheet">
+       
     </head>
     <body>
-        <div class="ultiMain">
-        <div class="leftMain">
+        <?php  include("inc/db.php"); ?>
+        <div class = "mainContainer">
+            <div class="insideDiv">
+                <div class="rightSide">
+                    <div class="topDiv">
+                    <p id = "signUpHead">Sign Up</p> <img src="../uploads/homeS.svg" alt="" id="homies" onclick="window.location.href = 'index.php';">
+                    </div>
+                
+                <form method = "POST" enctype = 'multipart/form-data'>
+                    <div class="fieldMain">
+                    <div class="fieldCont">
+                        <p class = "label">Name:</p>
+                        <input type="text" name = "cName" class = "inputs" required>
+                    </div>
+                    <div class="fieldCont">
+                        <p class = "label">Address:</p>
+                        <input type="text" name = "cAddress" class = "inputs" required>
+                    </div>
 
-        </div>
-        <div class="main">
-        <?php 
-        include("inc/function.php");    
-        call_user_func('signUp');
-        ?>
-        </div>
-        </div>
-       
+                    <div class="fieldCont">
+                        <p class = "label">Email:</p>
+                        <input type="text" name ="cEmail" class = "inputs" autocomplete = "username" required>
+                    </div>
+                    <div class="fieldCont">
+                        <p class = "label">Contact No :</p>
+                        <input type="number" name = "cContact" class = "inputs" required>
+                    </div>
+                    <div class="fieldCont">
+                        <p class = "label">Password :</p>
+                        <input type="password" id = "pass" class = "inputs" autocomplete = "new-password" required>
+                    </div>
+                    <div class="fieldCont">
+                        <p class = "label">Confirm Password :</p>
+                        <input type="password" id = "confirmPass" class = "inputs"  name = "cPass" autocomplete = "new-password" required>
+                    </div>
+                    </div>
+                    <button id = "sngup" name = "signUp">Sign Up</button><br>  
+                </form>
+                <?php
+                   
 
-    
-
-    </body>
-</html>
-<style>
-    body{
-        justify-content: center;
-        display: flex;
-        font-family: "Varela Round", sans-serif;
-    }
-    
-    .ultiMain{
-        height: 80vh;
-        margin-top: 7vh;
-        background: #eee;
-        display: flex;
-        justify-content: center;
-        width: 85vw;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    }
-    .main{
-        display: flex;
-        justify-content: center;
-        background: green;
-        width: 70%;
-    }
-    .leftMain{
-        background-image: linear-gradient(#5a5bf3, #91e7d9);
-        width: 30%;
-    }
-    #reg{
-        width: 100%;
+                     if(isset($_POST['signUp']))
+                     {
+                        $client_name = $_POST['cName'];
+                        $client_address = $_POST['cAddress'];
+                        $client_email = $_POST['cEmail'];
+                        $client_contact = $_POST['cContact'];
+                        $client_password = $_POST['cPass'];
+                        $user_profilephoto = $_FILES['user2.png'];
+                         $user_profilephoto_tmp = $_FILES['user2.png']['tmp_name'];
         
-    }
-    #frm{
-      width: 100%;
-    }
-    .signUpForm{
-        width: 100%;
-        padding-left: 20px;
-        background: white;
-    }
-    .fieldCont{
-      
-       
-    }
-    .fieldContbtn{
-     
-       
-    }
-    .data{
-        display:grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 100px 100px 100px 80px;
-        justify-content: center;
-        column-gap: 10px;
-        width: 100%;
-    }
-    input{
-        height: 40px;
-        width: 80%;
-        outline: none;
-        padding-left: 10px;
-        border: .8px solid #888;
-    }
-    p{
-        font-size: 14px;
-        color: #777;
-        padding: 0px;
-       
-    }
-    #regBtn{
-        width: 80%;
-        height: 42px;
-        outline: none; 
-        border: none;
-        border-radius: 5px;
-        background:#5a5bf3;
-        color: white;
-        float: left;
+                      move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
+                     
 
- 
-    }
-    #cancelBtn{
-        width: 80%;
-        height: 42px;
-        outline: none; 
-        border: 1px solid #5a5bf3;
-        color: #5a5bf3;
-        background: white;
-        border-radius: 5px;
-        margin-right: 2%;
-    }
-   
-</style>
-<script>
-    const addEve = document.getElementById('cancelBtn');
-    addEve.addEventListener("click", function(){
-        window.location.href = '/Pet/user/login.php';
-    })
-</script>
+                     $newClient = $con->prepare("INSERT INTO users_table (
+                         user_username,
+                         user_address,
+                         user_email,
+                         user_contactnumber,
+                         user_password,
+                         user_profilephoto
+                     )VALUES (
+                         '$client_name',
+                         '$client_address',
+                         '$client_email',
+                         '$client_contact',
+                         '$client_password',
+                         '$user_profilephoto'
+                     )");
+                if($newClient->execute())
+                {
+                 echo "<script>alert('Registration Successfull!');</script>"; 
+                 echo "<script>
+                 if ( window.history.replaceState ) {
+                    window.history.replaceState( null, null, window.location.href );
+                }            
+                 </script>";
+                }
+                else
+                {
+                    echo "<script>alert('Registration Unsuccessfull!');</script>";
+                }
+            }
+
+                ?>
+                </div>
+                <div class="leftSide">
+                
+                        <img src="../uploads/signGirl.svg" alt="" id="imgLeft">
+                </div>
+            </div>
+              
+        </div>
+    </body>
+    <script src="js/signup.js"></script>
+</html>
