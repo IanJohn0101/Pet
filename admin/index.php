@@ -21,8 +21,7 @@
             ?>
             <div class="mainContainer">
             <?php
-             include ("inc/bodyleft.php"); 
-             include ("inc/bodyright.php"); 
+             include ("inc/bodyleft.php");
             ?>
             </div>
             

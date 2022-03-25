@@ -3,75 +3,7 @@
 
     function signUp()
     {
-        include("inc/db.php");
         
-        echo "<div id ='signUpForm'>
-        <div class='signUpForm'>
-            <h3>Registration</h3>
-                <form method = 'POST' enctype = 'multipart/form-data'>
-                    <table>
-                        <tr>
-                            <td>Name: </td>
-                            <td><input type='text' name = 'user_username' /></td>
-                        </tr>
-                        <tr>
-                            <td>Password: </td>
-                            <td><input type='text' name =  'user_password' /></td>
-                        </tr>
-                        <tr>
-                            <td>Email: </td>
-                            <td><input type='text' name =  'user_email' /></td>
-                        </tr>
-                        <tr>
-                            <td>Contact Number: </td>
-                            <td><input type='text' name =  'user_contactnumber' /></td>
-                        </tr>
-                        <tr>
-                            <td>Photo: </td>
-                            <td><input type='file' name =  'user_profilephoto' /></td>
-                        </tr>
-                    </table>
-                    <button name = 'add_user'>Register</button>
-                </form>
-            </div>
-        </div>";
-        
-        if(isset($_POST['add_user']))
-        {
-            $user_username = $_POST['user_username'];
-            $user_password = $_POST['user_password'];
-            $user_email = $_POST['user_email'];
-            $user_contactnumber = $_POST['user_contactnumber'];
-
-            $user_profilephoto = $_FILES['user_profilephoto']['name'];
-            $user_profilephoto_tmp = $_FILES['user_profilephoto']['tmp_name'];
-        
-            move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
-
-            $add_user = $con->prepare("INSERT INTO users_table(
-                user_username,
-                user_password,
-                user_email,
-                user_contactnumber,
-                user_profilephoto
-            ) 
-            VALUES (
-                '$user_username',
-                '$user_password',
-                '$user_email',
-                '$user_contactnumber',
-                '$user_profilephoto'
-            )");
-
-            if($add_user->execute())
-            {
-                echo "<script>alert('Registration Successfull!');</script>"; 
-            }
-            else
-            {
-                echo "<script>alert('Registration Unsuccessfull!');</script>";
-            }
-        }
     }
 
     function LogIn()
@@ -145,7 +77,7 @@
                         <button name = 'update_user'>Update Profile</button>
                     </div>
                     <div class = 'usernameh'>
-                        <button class = 'back' onclick='window.location.href='/Pet/user/index.php'>Back to Home</button>
+                        <button class = 'back' id = 'backHome'><a href = '/Pet/user/index.php'>Back to Home</a></button>
                     </div>
                     </div>
                     <div class='rightSide'>
@@ -204,24 +136,12 @@
     {
         if(isset($_POST['cart_btn']))
         {
-            array_push( $_SESSION['cart'], $_POST['pro_id']);
-            echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+           array_push( $_SESSION['cart'], $_POST['pro_id']);
+           echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+
+           
         }
        
-    }
-
-    function cart_count()
-    {
-        // include("inc/db.php");
-
-        // $ip = getIp();
-        // $get_cart_item = $con->prepare("SELECT * FROM cart WHERE ip_add='$ip'");
-        // $get_cart_item->execute();
-
-        // $count_cart = $get_cart_item->rowCount();
-
-        // echo $count_cart;
-        //HEHE
     }
     
     function cart_display()
@@ -283,26 +203,20 @@
                             </form>    
                         </tr>
                     </form>";
-
             endwhile;
 
-            echo "<form method= 'GET' action = '/Pet/user/index.php?orders'>
-                    <tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
-                        <td colspan = '4' style='border: none;'></td>
-                        <td style='color:#444; border: none;'>
-                            Total Amount: ".$net_total."
-                            <input type = 'hidden' name = 'totalprice' value = ".$net_total." />
-                            </td>
-                            <td style='border: none;'>
-                            <button id = 'pro_btn' style='width: 90%;margin-top: 15px;'>Place Order</button>
-                        </td>
-                    </tr>
-                 </form>";
-
-                 if(isset($_GET['orders']))
-                 {
-                     include("checkout.php");
-                 }
+            echo 
+            "<tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
+                <td colspan = '4' style='border: none;'></td>
+                <td style='color:#444; border: none;'>
+                    Total Amount: ".$net_total."
+                        <input type = 'hidden' name = 'totalprice' value = ".$net_total." />
+                    </td>
+                    <td style='border: none;'>
+                    <a href = 'checkout.php' id = 'pro_btn' style='width: 90%;margin-top: 15px;' name = 'place_order'>Place Order</a>
+                </td>
+            </tr>";
+                 
         }
         else
         {
@@ -317,6 +231,81 @@
                     <a id = 'linkEmpty'href='/Pet/user/index.php'>Click Here to Buy a Product from our Store!</a>
                  </td>
             </div>";
+        }
+    }
+
+    function view_orders()
+    {
+        include("inc/db.php");
+        
+        if(isset($_GET['user_id']))
+        {
+            $uID = $_GET['user_id'];
+
+            $get_name = $con->prepare("SELECT * FROM users_table WHERE user_id = '$uID'");
+            $get_name->setFetchMode(PDO:: FETCH_ASSOC);
+            $get_name->execute();
+            $row_get_user_id = $get_name->fetch();
+
+            $userID = $row_get_user_id['user_id'];
+            $display_order = $con->prepare("SELECT * FROM orders_tbl WHERE user_id = '$userID'");
+            $display_order->setFetchMode(PDO:: FETCH_ASSOC);
+            $display_order->execute();
+            
+
+            $net_total = 0;
+           
+            while($row = $display_order->fetch()):
+                $pro_id = $row['pro_id'];
+                $display_prod = $con->prepare("SELECT * FROM product_tbl WHERE pro_id = '$pro_id'");
+                $display_prod->setFetchMode(PDO:: FETCH_ASSOC);
+                $display_prod->execute();
+                $row_get_prod_id = $display_prod->fetch();
+
+                $qty = $row['qty'];
+                $pro_price = $row_get_prod_id['pro_price'];
+                $sub_total = $qty * $pro_price;
+
+                echo 
+                "<tr>
+                    <td>".$row_get_prod_id['pro_name']."</td>
+                    <td>".$row['qty']."</td>
+                    <td>".$row['delivery_status']."</td>
+                    <td><a href = 'cancel_order.php?cancel_order=".$row['order_id']."'>CANCEL</a></td>
+                </tr>";
+                $net_total = $net_total + $sub_total;
+            endwhile;
+            echo 
+            "<tr>
+                <td>TOTAL AMOUNT: ".$net_total."</td>
+            </tr>";
+        }    
+    }
+
+    function cancel_order()
+    {
+        include("inc/db.php");
+        if(isset($_GET['cancel_order']))
+        {
+            $ordID = $_GET['cancel_order'];
+            $query = $con->prepare("SELECT * FROM orders_tbl WHERE order_id = '$ordID'");
+            $query->setFetchMode(PDO:: FETCH_ASSOC);
+            $query->execute();
+
+            $row = $query->fetch();
+            if($row['delivery_status'] == "FOR DELIVERY")
+            {
+                echo "<script>alert('YOUR ORDER IS FOR DELIVERY, UNABLE TO CANCEL');</script>";
+            }
+            else
+            {
+                $del_query = $con->prepare("DELETE FROM orders_tbl WHERE order_id = '$ordID'");
+                if($del_query->execute())
+                {
+                    echo "<script>alert('Item Removed Successfully!');</script>";
+                    echo "<script>window.open('view_order.php?user_id=".$row['user_id']."','_self');</script>";
+                }
+            }
         }
     }
     
@@ -450,7 +439,11 @@
                             <button name = 'cart_btn'>Add to Cart</button>
                         </form>
                     </center>
-                </div><br clear = 'all'>    
+                </div><br clear = 'all'>";
+                    if(isset($_POST)){
+// asdsdsssss////////////////////////
+                    }
+                echo"
                 <div id = 'sim_pro'>
                     <h3>Related Products</h3>
                     <ul>";
@@ -510,6 +503,7 @@
                     <label>Date Open: </label>
                     <h3>".$row_pro['service_date_open']."</h3>
                 </div>";
+            echo "<a href = 'avail_service.php?avail_service=".$row_pro['service_id']."'><button>Reserve Service</button></a>";
         }
     }
 
@@ -592,7 +586,7 @@
                                 <button id = 'pro_btnView'>
                                     <a href = 'pro_detail.php?pro_id=".$row_cat['pro_id']."'>View</a>
                                 </button>
-                                <input type = 'hidden' value = '".$row_pro['pro_id']."' name = 'pro_id' />
+                                <input type = 'hidden' value = '".$row_cat['pro_id']."' name = 'pro_id' />
                                 <button id = 'pro_btn' name = 'cart_btn'>Cart
                                 </button>
                                 
@@ -680,27 +674,4 @@
         }
     }
 ?>
-
-<script>
-
-    var tp = 0;
-    var price = document.getElementsByClassName('price');
-    var quantity = document.getElementsByClassName('quantity');
-    var subtotal = document.getElementsByClassName('subtotal');
-    var total_price = document.getElementsByClassName('total_price');
-
-    function subTotal()
-    {
-        tp=0;
-        for(i=0;i<price.length;i++)
-        {
-            subtotal[i].innerText=(price[i].value)*(quantity[i].value);
-            tp=tp+(price[i].value)*(quantity[i].value);
-        }
-        total_price.innerText=tp;
-    }
-
-    subTotal();
-</script>
-
 

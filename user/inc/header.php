@@ -23,13 +23,7 @@
             <?php
                 if(isset($_SESSION['user_username']))
                 {
-                    // echo "<img class='profileImg' src = '../uploads/userIcon.svg'>";
-                    // echo "
-                    // <ul class ='dropcontent'>
-                    // <li><a href = 'myProfile.php'>My Profile</a></li>
-                    // <li><a href = 'logout.php'>Log Out</a></li>
-                    // </ul>
-                    // ";
+                
                     include("inc/db.php");
                     $username = $_SESSION['user_username'];
                     $getuserprofile = $con->prepare("SELECT * FROM users_table WHERE user_username = '$username'");
@@ -41,6 +35,7 @@
                     echo "<img class='profileImg' src = '../uploads/user_profile/".$row['user_profilephoto']."'>
                             <ul class = 'dropcontent'>
                                 <li><a href = 'myProfile.php'>My Profile</a></li>
+                                <li><a href = 'view_order.php?user_id=".$row['user_id']."'>My Orders</a></li>
                                 <li><a href = 'logout.php'>Log Out</a></li>
                             </ul>";
                     

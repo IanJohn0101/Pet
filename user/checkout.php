@@ -17,28 +17,65 @@
         $display_cart->execute();
     
         $row_user = $fetch_user_username->fetch();
-
-        echo "Products: ";
-        //Butngan nimo og image ing ani-a lang
-        //$row_prod['pro_img'];
-        //e sod na sa while loop
-        while($row_prod = $display_cart->fetch()):
-            echo $row_prod['pro_name'];
-            echo "<tr>(x".array_count_values($_SESSION['cart'])[$row_prod['pro_id']]. ")  </tr>";
+        $net_total = 0;
+       echo "Product Details:";
+        while($row = $display_cart->fetch()):
+            $qty = array_count_values($_SESSION['cart'])[$row['pro_id']];
+            $pro_price = $row['pro_price'];
+            $sub_total = $qty * $pro_price; 
+        echo 
+        "<form method = 'POST'  enctype = 'multipart/form-data'>
+            <div>
+                <tr>";
+                echo "Product Name: ";
+                echo"
+                    <td><input type = 'hidden' name = 'pro_id' value = ".$row['pro_id']." /></td>
+                    <td>".$row['pro_name']."</td>
+                    <td>Qty: </td>
+                    <td><input type = 'hidden' name = 'qty' value = ".array_count_values($_SESSION['cart'])[$row['pro_id']]." /></td>
+                    <td>(x".array_count_values($_SESSION['cart'])[$row['pro_id']].")</td><br>
+                </tr>";
+                $net_total = $net_total + $sub_total;
         endwhile;
+            echo"
+                <tr>
+                <td>Total:".$net_total."</td><br>";
+                echo"</tr>
+                <tr>
+                    <td>Your Information ⬇ </td><br>
+                </tr>
+                <tr>
+                    <td>Your Name: </td>
+                    <td><input type = 'hidden' name = 'user_id' value = ".$row_user['user_id']." /></td>
+                    <td>".$row_user['user_username']."</td><br>
+                </tr>
+                <tr>
+                    <td>Contact Number: </td>
+                    <td><input type = 'hidden' name = 'user_contactnumber' value = ".$row_user['user_contactnumber']." /></td>
+                    <td>".$row_user['user_contactnumber']."</td><br>
+                </tr>
+                <tr>
+                    <td>Location: </td>
+                    <td><input type = 'hidden' name = 'user_address' value = ".$row_user['user_address']." /></td>
+                    <td>".$row_user['user_address']."</td><br>
+                </tr>
+                <tr>
+                    <td>Email Address: </td>
+                    <td><input type = 'hidden' name = 'user_email' value = ".$row_user['user_email']." /></td>
+                    <td>".$row_user['user_email']."</td><br>
+                </tr>
+                <tr>
 
-        echo "<div>Total Cart Items: ".count($_SESSION['cart'])."</div>";
-        echo "<div>Total Amount to be Paid: ".$_GET['totalprice']."</div>";
-
-        echo "<br>
-              <div>Your Information ⬇</div>
-              <div>Name: ".$row_user['user_username']."</div>
-              <div>Contact Number: ".$row_user['user_contactnumber']."</div>
-              <div>Location: ".$row_user['user_address']."</div>
-              <div>Email Address: ".$row_user['user_email']."</div>";
+                    <td><a href = 'payorder.php'>Place Order</a></td>
+                </tr>
+                <tr>
+                    <td><a href = 'index.php'>Go Home</a></td>
+                </tr>
+            </div>
+        </form>";
         
-        echo "<input type = 'hidden' value = '".$row_user['user_id']."' name = 'user_id' />
-              <button>Place Order</button>";
+        
+       
     }
 ?>
 <style>
