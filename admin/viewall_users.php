@@ -3,12 +3,11 @@
     <form method = "POST" enctype = "multipart/form-data">
     <table>
         <tr>
-            <th>User Id</th>
             <th>User Name</th>
-            <th>User Password</th>
+            <th>User Email</th>
             <th>Contact Info</th>
-            <th>Name</th>
-            <th>Image</th>
+            <th>Municipality</th>
+            <th>Barangay</th>
             <th>Delete</th>
         </tr>
         <tr>

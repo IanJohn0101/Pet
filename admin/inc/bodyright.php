@@ -40,6 +40,10 @@
         {
             include("viewall_orders.php");
         }
+        if(isset($_GET['viewall_users']))
+        {
+            include("viewall_users.php");
+        }
     ?>
 </div>
 

@@ -398,9 +398,8 @@
         $fetch_pro->execute();
 
         while($row_pro = $fetch_pro->fetch()):
-            echo"
-            
-                <li>
+            echo
+            "<li>
                     <form method = 'post' enctype='multipart/form-data'>
                     <a href='pro_detail.php?pro_id=".$row_pro['pro_id']."'>
                         <h4>".$row_pro['pro_name']."</h4>
@@ -477,7 +476,7 @@
             $cat_id = $row_pro['cat_id'];
             echo 
                 "<div id = 'pro_img'>
-                    <img src ='../uploads/products/".$row_pro['pro_img']."'/>
+                    <img src ='/uploads/products/".$row_pro['pro_img']."'/>
                     <ul>
                         <li>
                             <img src ='../uploads/products/".$row_pro['pro_img']."'/>
@@ -649,7 +648,7 @@
                     <li>
                         <a href='pro_detail.php?pro_id=".$row_cat['pro_id']."'>
                             <h4>".$row_cat['pro_name']."</h4>
-                            <img src ='../uploads/products/".$row_cat['pro_img']."' />
+                            <img src ='/uploads/products/".$row_cat['pro_img']."' />
                             <center>
                                 <button id = 'pro_btnView'>
                                     <a href = 'pro_detail.php?pro_id=".$row_cat['pro_id']."'>View</a>
@@ -727,7 +726,7 @@
                         <li>
                             <a href='pro_detail.php?pro_id=".$row['pro_id']."'>
                                 <h4>".$row['pro_name']."</h4>
-                                <img src ='./uploads/products/".$row['pro_img']."' />
+                                <img src ='../uploads/products/".$row['pro_img']."' />
                                 <center>
                                 <button id = 'pro_btnView'>
                                 <a href = 'pro_detail.php?pro_id=".$row['pro_id']."'>View</a>

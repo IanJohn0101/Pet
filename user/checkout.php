@@ -38,8 +38,19 @@
                 $net_total = $net_total + $sub_total;
         endwhile;
             echo"
-                <tr>
-                <td>Total:".$net_total."</td><br>";
+                <tr>";
+                if($row_user['municipality'] == "MANDAUE")
+                {
+                    "<td>Total:".$net_total + 1."</td><br>";
+                }
+                elseif($row_user['municipality'] == "CEBU")
+                {
+                    "<td>Total:".$net_total + 2."</td><br>"; 
+                }
+                else
+                {
+                    "<td>Total:".$net_total + 10."</td><br>";
+                }
                 echo"</tr>
                 <tr>
                     <td>Your Information ⬇ </td><br>

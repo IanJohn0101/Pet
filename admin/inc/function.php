@@ -123,35 +123,6 @@
         }
     }
     
-    function add_sub_cat()
-    {
-        include("inc/db.php");
-        if(isset($_POST['add_sub_cat']))
-        {
-            $cat_id = $_POST['main_cat'];
-            $sub_cat_name = $_POST['sub_cat_name'];
-            $add_sub_cat = $con->prepare("insert into sub_cat
-            (
-                sub_cat_name, 
-                cat_id
-            ) 
-            values
-            (
-                '$sub_cat_name', 
-                '$cat_id'
-            )");
-            
-            if($add_sub_cat->execute())
-            {
-               echo "<script>alert('Sub Category Added Successfully!');</script>"; 
-            }
-            else
-            {
-                echo "<script>alert('Sub Category Not Added Successfully!');</script>";
-            }
-        }
-    }
-
     function add_product() 
     {
        include("inc/db.php");
@@ -159,7 +130,6 @@
        {
            $pro_name = $_POST['pro_name'];
            $cat_id = $_POST['cat_name'];
-           $sub_cat_id = $_POST['sub_cat_name'];
            $pro_brand = $_POST['pro_brand'];
            $pro_keyword = $_POST['pro_keyword'];
            
@@ -186,8 +156,7 @@
            $add_pro = $con->prepare("insert into product_tbl
            (
                pro_name, 
-               cat_id, 
-               sub_cat_id, 
+               cat_id,  
                pro_brand, 
                pro_img, 
                pro_img2, 
@@ -200,7 +169,6 @@
             (
                 '$pro_name',
                 '$cat_id',
-                '$sub_cat_id',
                 '$pro_brand',
                 '$pro_img',
                 '$pro_img2',
@@ -260,8 +228,8 @@
         $fetch_order->execute();
 
         while($row=$fetch_order->fetch()):
-        $user_id = $row['user_username'];
-        $pro_id = $row['pro_name'];
+        $user_id = $row['user_id'];
+        $pro_id = $row['pro_id'];
 
         $fetch_username=$con->prepare("SELECT * FROM users_table WHERE user_id = '$user_id'");
         $fetch_username->setFetchMode(PDO:: FETCH_ASSOC);
@@ -315,36 +283,6 @@
                 }
             }
         }
-    }
-
-    function viewall_sub_category()
-    {
-        include("inc/db.php");
-        $fetch_cat=$con->prepare("SELECT * from sub_cat ORDER BY sub_cat_name");
-        $fetch_cat->setFetchMode(PDO:: FETCH_ASSOC);
-        $fetch_cat->execute();
-        $i=1;
-
-        while($row=$fetch_cat->fetch()):
-            echo "<tr>
-                    <td>".$i++."</td>
-                    <td>".$row['sub_cat_name']."</td>
-                    <td style = 'width:10%'><a href='index.php?edit_sub_cat=".$row['sub_cat_id']."'>Edit</a></td>
-                    <td style = 'width:10%'><a href='delete_cat.php?delete_sub_cat=".$row['sub_cat_id']."'>Delete</a></td>
-                 </tr>";
-        endwhile;
-    }
-    
-    function viewall_sub_cat()
-    {
-        include("inc/db.php");
-        $fetch_sub_cat=$con->prepare("SELECT * from sub_cat");
-        $fetch_sub_cat->setFetchMode(PDO:: FETCH_ASSOC);
-        $fetch_sub_cat->execute();
-                            
-        while($row=$fetch_sub_cat->fetch()):
-            echo "<option value = '".$row['sub_cat_id']."'>".$row['sub_cat_name']."</option>";
-        endwhile;
     }
 
     function view_all_products()
@@ -412,46 +350,11 @@
         }
     }
 
-    // function edit_sub_cat()
-    // {
-    //     include("inc/db.php");
-    //     if(isset($_GET['edit_sub_cat']))
-    //     {
-    //         $sub_cat_id = $_GET['edit_sub_cat'];
-    //         $fetch_sub_cat_name = $con->prepare("SELECT * from sub_cat WHERE sub_cat_id='$sub_cat_id'");
-    //         $fetch_sub_cat_name->setFetchMode(PDO:: FETCH_ASSOC);
-    //         $fetch_sub_cat_name->execute();
-    //         $row = $fetch_sub_cat_name->fetch();
-
-    //         echo "<h3>Edit Sub-Category</h3>
-    //         <form method = 'POST'>
-    //             <table>
-    //                 <tr>
-    //                     <td>Sub-Category Name: </td>
-    //                     <td><input type='text' name = 'sub_cat_name' value = '".$row['sub_cat_name']."'/></td>
-    //                 </tr>
-    //             </table>
-    //             <button name = 'update_sub_cat'>Update Sub Category</button>
-    //         </form>";
-
-    //         if(isset($_POST['update_sub_cat']))
-    //         {
-    //             $sub_cat_name = $_POST['sub_cat_name'];
-    //             $update_sub_cat = $con->prepare("UPDATE sub_cat SET sub_cat_name='$sub_cat_name' WHERE sub_cat_id = '$sub_cat_id'");
-                
-    //             if($update_sub_cat->execute())
-    //             {
-    //                 echo "<script>alert('Category Updated Successfully!');</script>";
-    //                 echo "<script>window.open('index.php?viewall_sub_cat','_self');</script>";
-    //             }
-    //         }
-    //     }
-    //}
-
+   
     function viewall_users()
     {
         include("inc/db.php");
-        $fetch_pro = $con->prepare("SELECT * from usercustomer");
+        $fetch_pro = $con->prepare("SELECT * from users_table");
         $fetch_pro->setFetchMode(PDO:: FETCH_ASSOC);
         $fetch_pro->execute();
 
@@ -460,12 +363,13 @@
         while($row=$fetch_pro->fetch()):
             echo "<tr>
                 <td>".$i++."</td>
-                <td style = 'min-width:200px'>".$row['custUsername']."</td>
-                <td>".$row['custPassword']."</td>
-                <td>".$row['custName']."</td>
-                <td>".$row['custContactInfo']."</td>
+                <td style = 'min-width:200px'>".$row['user_username']."</td>
+                <td>".$row['user_email']."</td>
+                <td>".$row['user_contactnumber']."</td>
+                <td>".$row['municipality']."</td>
+                <td>".$row['barangay']."</td>
                 <td style = 'min-width:200px'>
-                    <img src = '../uploads/user_profile/".$row['profilePic']."'/>
+                    <img src = '../uploads/user_profile/".$row['user_profilephoto']."'/>
                 </td>
                 <td><a href='#'>Edit</a></td>
                 <td><a href='#'>Delete</a></td>
@@ -484,7 +388,6 @@
             $fetch_pro_name->execute();
             $row = $fetch_pro_name->fetch();
             $cat_id = $row['cat_id'];
-            $sub_cat_id = $row['sub_cat_id'];
 
             $fetch_cat = $con->prepare("SELECT * from pet_prod WHERE prod_id='$cat_id'");
             $fetch_cat->setFetchMode(PDO:: FETCH_ASSOC);
@@ -492,12 +395,7 @@
             $row_cat = $fetch_cat->fetch();
             $cat_name = $row_cat['cat_name'];
 
-            $fetch_sub_cat = $con->prepare("SELECT * from sub_cat WHERE sub_cat_id='$sub_cat_id'");
-            $fetch_sub_cat->setFetchMode(PDO:: FETCH_ASSOC);
-            $fetch_sub_cat->execute();
-            $row_sub_cat = $fetch_cat->fetch();
-            $sub_cat_name = $row_sub_cat['sub_cat_name'];
-
+         
             echo "<h3>Edit Product</h3>
             <form method = 'POST'>
                 <table>
@@ -507,15 +405,6 @@
                             <select name = 'cat_name'>
                                 <option value = '".$row['cat_id']."'>".$cat_name."</option>
                                 ";echo viewall_cat(); echo"
-                            </select>
-                        </td>
-                    </tr>
-                   <tr>
-                        <td>Update Sub-Category Name: </td>
-                        <td>
-                            <select name = 'sub_cat_name'>
-                                <option value = '".$row['sub_cat_id']."'>".$sub_cat_name."</option>
-                                ";echo viewall_sub_cat(); echo"
                             </select>
                         </td>
                     </tr>
@@ -620,18 +509,7 @@
         }
     }
 
-    function delete_sub_cat()
-    {
-        include("inc/db.php");
-
-        $delete_sub_cat_id = $_GET['delete_sub_cat'];
-        $delete_sub_cat  = $con->prepare("delete from sub_cat where sub_cat_id = '$delete_sub_cat_id'");
-        if($delete_sub_cat->execute())
-        {
-            echo "<script>alert('Sub Category Deleted Successfully!');</script>";
-            echo "<script>window.open('index.php?viewall_sub_cat','_self');</script>";
-        }
-    }
+    
 
     function delete_prod()
     {
