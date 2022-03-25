@@ -65,36 +65,36 @@
     function add_pet_center_user()
     {
         include("inc/db.php");
+
         
         echo "<div id ='signUpForm'>
-        <div class='signUpForm'>
-            <h3>Add Pet Center</h3>
+        <div id = 'reg'>
+            <div id = 'regist'> <h3>Add Pet Center</h3></div>
+        </div>
+        <div id = 'frm'>
                 <form method = 'POST' enctype = 'multipart/form-data'>
-                    <table>
-                        <tr>
-                            <td>Name: </td>
-                            <td><input type='text' name = 'pet_center_name' /></td>
-                        </tr>
-                        <tr>
-                            <td>Password: </td>
-                            <td><input type='text' name =  'pet_center_password' /></td>
-                        </tr>
-                        <tr>
-                            <td>Email: </td>
-                            <td><input type='text' name =  'email' /></td>
-                        </tr>
-                        <tr>
-                            <td>Contact Number: </td>
-                            <td><input type='text' name =  'contact_number' /></td>
-                        </tr>
-                        <tr>
-                            <td>Photo: </td>
-                            <td><input type='file' name =  'pet_center_photo' /></td>
-                        </tr>
-                    </table>
-                    <button name = 'add_user'>Add Service</button>
+                    <div class = 'data'>
+                        <div class = 'fieldCont'>
+                            <p>Pet Center Name: </p>
+                            <input type='text' name = 'pet_center_name' />
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Password: </p>
+                            <input type='text' name =  'pet_center_password' />
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Email: </p>
+                            <input type='text' name =  'email' />
+                        </div>
+                        <div class = 'fieldCont'>
+                            <p>Contact Number: </p>
+                            <input type='text' name =  'contact_number' />
+                        </div>
+                       
+                    </div>
+                    <button name = 'add_user'>Register</button>
                 </form>
-            </div>
+                </div>
         </div>";
         if(isset($_POST['add_user']))
         {
