@@ -5,6 +5,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Palette+Mosaic&family=Rubik:wght@500&family=Varela+Round&display=swap" rel="stylesheet">
+
         <title>SignUP User</title>
     </head>
     <body>
@@ -14,6 +15,7 @@
                 <div class="rightSide">
                     <div class="topDiv">
                     <p id = "signUpHead">Sign Up</p> <img src="../uploads/homeS.svg" alt="" id="homies" onclick="window.location.href = 'index.php';">
+
                     </div>
                 
                 <form method = "POST" enctype = 'multipart/form-data'>
@@ -91,12 +93,12 @@
                     echo "<script>alert('Registration Unsuccessfull!');</script>";
                 }
             }
-
                 ?>
                 </div>
                 <div class="leftSide">
                 
                         <img src="../uploads/signGirl.svg" alt="" id="imgLeft">
+
                 </div>
             </div>
               
