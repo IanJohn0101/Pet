@@ -3,75 +3,7 @@
 
     function signUp()
     {
-        include("inc/db.php");
         
-        echo "<div id ='signUpForm'>
-        <div class='signUpForm'>
-            <h3>Registration</h3>
-                <form method = 'POST' enctype = 'multipart/form-data'>
-                    <table>
-                        <tr>
-                            <td>Name: </td>
-                            <td><input type='text' name = 'user_username' required/></td>
-                        </tr>
-                        <tr>
-                            <td>Password: </td>
-                            <td><input type='text' name =  'user_password' required/></td>
-                        </tr>
-                        <tr>
-                            <td>Email: </td>
-                            <td><input type='text' name =  'user_email' required/></td>
-                        </tr>
-                        <tr>
-                            <td>Contact Number: </td>
-                            <td><input type='text' name =  'user_contactnumber' required/></td>
-                        </tr>
-                        <tr>
-                            <td>Photo: </td>
-                            <td><input type='file' name =  'user_profilephoto' required/></td>
-                        </tr>
-                    </table>
-                    <button name = 'add_user'>Register</button>
-                </form>
-            </div>
-        </div>";
-        
-        if(isset($_POST['add_user']))
-        {
-            $user_username = $_POST['user_username'];
-            $user_password = $_POST['user_password'];
-            $user_email = $_POST['user_email'];
-            $user_contactnumber = $_POST['user_contactnumber'];
-
-            $user_profilephoto = $_FILES['user_profilephoto']['name'];
-            $user_profilephoto_tmp = $_FILES['user_profilephoto']['tmp_name'];
-        
-            move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
-
-            $add_user = $con->prepare("INSERT INTO users_table(
-                user_username,
-                user_password,
-                user_email,
-                user_contactnumber,
-                user_profilephoto
-            ) 
-            VALUES (
-                '$user_username',
-                '$user_password',
-                '$user_email',
-                '$user_contactnumber',
-                '$user_profilephoto'
-            )");
-
-            if($add_user->execute())
-            {
-                echo "<script>alert('Registration Successfull!');</script>"; 
-            }
-            else
-            {
-                echo "<script>alert('Registration Unsuccessfull!');</script>";
-            }
-        }
     }
 
     function LogIn()
@@ -145,7 +77,7 @@
                         <button name = 'update_user'>Update Profile</button>
                     </div>
                     <div class = 'usernameh'>
-                        <button class = 'back' onclick='window.location.href='/Pet/user/index.php'>Back to Home</button>
+                        <button class = 'back' id = 'backHome'><a href = '/Pet/user/index.php'>Back to Home</a></button>
                     </div>
                     </div>
                     <div class='rightSide'>
@@ -204,8 +136,10 @@
     {
         if(isset($_POST['cart_btn']))
         {
-            array_push( $_SESSION['cart'], $_POST['pro_id']);
-            echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+           array_push( $_SESSION['cart'], $_POST['pro_id']);
+           echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+
+           
         }
        
     }
@@ -269,9 +203,7 @@
                             </form>    
                         </tr>
                     </form>";
-
             endwhile;
-
 
             echo 
             "<tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
@@ -284,11 +216,7 @@
                     <a href = 'checkout.php' id = 'pro_btn' style='width: 90%;margin-top: 15px;' name = 'place_order'>Place Order</a>
                 </td>
             </tr>";
-
-                 if(isset($_GET['orders']))
-                 {
-                     include("checkout.php");
-                 }
+                 
         }
         else
         {
@@ -510,7 +438,11 @@
                             <button name = 'cart_btn'>Add to Cart</button>
                         </form>
                     </center>
-                </div><br clear = 'all'>    
+                </div><br clear = 'all'>";
+                    if(isset($_POST)){
+// asdsdsssss////////////////////////
+                    }
+                echo"
                 <div id = 'sim_pro'>
                     <h3>Related Products</h3>
                     <ul>";
@@ -741,6 +673,4 @@
         }
     }
 ?>
-
-
 

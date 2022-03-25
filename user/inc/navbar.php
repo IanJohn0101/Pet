@@ -11,9 +11,6 @@
                 </li>
                 <li> 
                     <a href = "#">SERVICES</a>
-                    <ul>
-                        <?php echo viewall_cat(); ?>
-                    </ul>
                 </li>
                 <li> <a href = "/Pet/user/index.php?donation">DONATE</a></li>
                 <li> <a href = "/Pet/user/index.php?myPet">MY PET</a></li>
