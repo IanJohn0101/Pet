@@ -17,10 +17,14 @@
         <div class="main">
         <?php 
         include("inc/function.php");    
-        call_user_func('add_pet_center_user');
+        call_user_func('signUp');
         ?>
         </div>
         </div>
+       
+
+    
+
     </body>
 </html>
 <style>
@@ -56,7 +60,7 @@
     #frm{
       width: 100%;
     }
-    #signUpForm{
+    .signUpForm{
         width: 100%;
         padding-left: 20px;
         background: white;

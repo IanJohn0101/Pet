@@ -136,8 +136,10 @@
     {
         if(isset($_POST['cart_btn']))
         {
-            array_push( $_SESSION['cart'], $_POST['pro_id']);
-            echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+           array_push( $_SESSION['cart'], $_POST['pro_id']);
+           echo "<script>window.open('/Pet/user/index.php?' ,'_self');</script>";  
+
+           
         }
        
     }
@@ -201,9 +203,7 @@
                             </form>    
                         </tr>
                     </form>";
-
             endwhile;
-
 
             echo 
             "<tr style='box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);background:#F5F2E7; '>
@@ -216,7 +216,6 @@
                     <a href = 'checkout.php' id = 'pro_btn' style='width: 90%;margin-top: 15px;' name = 'place_order'>Place Order</a>
                 </td>
             </tr>";
-
                  
         }
         else
@@ -440,7 +439,11 @@
                             <button name = 'cart_btn'>Add to Cart</button>
                         </form>
                     </center>
-                </div><br clear = 'all'>    
+                </div><br clear = 'all'>";
+                    if(isset($_POST)){
+// asdsdsssss////////////////////////
+                    }
+                echo"
                 <div id = 'sim_pro'>
                     <h3>Related Products</h3>
                     <ul>";
@@ -671,6 +674,4 @@
         }
     }
 ?>
-
-
 

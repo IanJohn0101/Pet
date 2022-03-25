@@ -5,14 +5,17 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Palette+Mosaic&family=Rubik:wght@500&family=Varela+Round&display=swap" rel="stylesheet">
-       
+
+        <title>SignUP User</title>
     </head>
     <body>
+        <?php  include("inc/db.php"); ?>
         <div class = "mainContainer">
             <div class="insideDiv">
                 <div class="rightSide">
                     <div class="topDiv">
-                    <p id = "signUpHead">Sign Up</p> <img src="../img/home.svg" alt="" id="homies" onclick="window.location.href = 'index.php';">
+                    <p id = "signUpHead">Sign Up</p> <img src="../uploads/homeS.svg" alt="" id="homies" onclick="window.location.href = 'index.php';">
+
                     </div>
                 
                 <form method = "POST" enctype = 'multipart/form-data'>
@@ -28,11 +31,11 @@
 
                     <div class="fieldCont">
                         <p class = "label">Email:</p>
-                        <input type="text" name ="user_email" class = "inputs" autocomplete = "username" required>
+                        <input type="text" name ="cEmail" class = "inputs" autocomplete = "username" required>
                     </div>
                     <div class="fieldCont">
                         <p class = "label">Contact No :</p>
-                        <input type="number" name = "user_contactnumber" class = "inputs" required>
+                        <input type="number" name = "cContact" class = "inputs" required>
                     </div>
                     <div class="fieldCont">
                         <p class = "label">Password :</p>
@@ -40,68 +43,66 @@
                     </div>
                     <div class="fieldCont">
                         <p class = "label">Confirm Password :</p>
-                        <input type="password" id = "confirmPass" class = "inputs"  name = "user_password" autocomplete = "new-password" required>
+                        <input type="password" id = "confirmPass" class = "inputs"  name = "cPass" autocomplete = "new-password" required>
                     </div>
                     </div>
                     <button id = "sngup" name = "signUp">Sign Up</button><br>  
                 </form>
                 <?php
-
-
-                   include("inc/db.php");
-                   if(isset($_POST['signUp']))
-                   {
-                       $user_username = $_POST['user_username'];
-                       $user_password = $_POST['user_password'];
-                       $user_email = $_POST['user_email'];
-                       $user_contactnumber = $_POST['user_contactnumber'];
-           
-                       $user_profilephoto = $_FILES['user_profilephoto']['name'];
-                       $user_profilephoto_tmp = $_FILES['user_profilephoto']['tmp_name'];
                    
-                       move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
-           
-                       $add_users = $con->prepare("INSERT INTO users_table (
-                           user_username,
-                           user_password,
-                           user_email,
-                           user_contactnumber,
-                           user_profilephoto
-                       ) 
-                       VALUES (
-                           '$user_username',
-                           '$user_password',
-                           '$user_email',
-                           '$user_contactnumber',
-                           '$user_profilephoto'
-                       )");
-           
 
-           
-           if($add_users->execute())
-           {
-            echo "<script>alert('Registration Successfull!');</script>"; 
-            echo "<script>
-            if ( window.history.replaceState ) {
-               window.history.replaceState( null, null, window.location.href );
-           }            
-            </script>";
-           }
-           else
-           {
-               echo "<script>alert('Registration Unsuccessfull!');</script>";
-           }
-                   }
+                     if(isset($_POST['signUp']))
+                     {
+                        $client_name = $_POST['cName'];
+                        $client_address = $_POST['cAddress'];
+                        $client_email = $_POST['cEmail'];
+                        $client_contact = $_POST['cContact'];
+                        $client_password = $_POST['cPass'];
+                        $user_profilephoto = $_FILES['user2.png'];
+                         $user_profilephoto_tmp = $_FILES['user2.png']['tmp_name'];
+        
+                      move_uploaded_file($user_profilephoto_tmp,"../uploads/user_profile/$user_profilephoto");
+                     
 
+                     $newClient = $con->prepare("INSERT INTO users_table (
+                         user_username,
+                         user_address,
+                         user_email,
+                         user_contactnumber,
+                         user_password,
+                         user_profilephoto
+                     )VALUES (
+                         '$client_name',
+                         '$client_address',
+                         '$client_email',
+                         '$client_contact',
+                         '$client_password',
+                         '$user_profilephoto'
+                     )");
+                if($newClient->execute())
+                {
+                 echo "<script>alert('Registration Successfull!');</script>"; 
+                 echo "<script>
+                 if ( window.history.replaceState ) {
+                    window.history.replaceState( null, null, window.location.href );
+                }            
+                 </script>";
+                }
+                else
+                {
+                    echo "<script>alert('Registration Unsuccessfull!');</script>";
+                }
+            }
                 ?>
                 </div>
                 <div class="leftSide">
                 
-                        <img src="../img/signUp.svg" alt="" id="imgLeft">
+                        <img src="../uploads/signGirl.svg" alt="" id="imgLeft">
+
                 </div>
             </div>
               
         </div>
     </body>
-    <script src="jscripts/signup.js"></script>
+    <script src="js/signup.js"></script>
 </html>

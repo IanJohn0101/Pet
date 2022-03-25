@@ -20,12 +20,9 @@
             include ("inc/navbar.php"); 
         ?>
         <div class = "cart">
-            
                 <?php 
                     call_user_func('cart_display');
                 ?>
-            
-            
         </div>
         <?php include("inc/footer.php"); ?>
         

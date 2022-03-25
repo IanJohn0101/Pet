@@ -65,6 +65,7 @@
                     <td>".$row_user['user_email']."</td><br>
                 </tr>
                 <tr>
+
                     <td><a href = 'payorder.php'>Place Order</a></td>
                 </tr>
                 <tr>

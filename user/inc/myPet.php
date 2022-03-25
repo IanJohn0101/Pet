@@ -1,6 +1,5 @@
 <html>
     <head>
-
     </head>
     <body>
         
@@ -8,6 +7,6 @@
 </html>
 <style>
     body{
-        background: red;
+        background: green;
     }
 </style>
