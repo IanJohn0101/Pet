@@ -858,17 +858,14 @@ function updateThumbnail(dropZoneElement, file) {
                         {
                             echo "<p  class = 'asd'>".$coupon_code."</p>";
                         }
-
-                    echo"</div>";
                     
                     echo
                     "
                     <div>
-                    
                     <button class = 'oks' name = 'confirm_request' >Confirm</button>
                     <a class = 'views' href = 'viewuserpet.php?view_pet=".$user_id."'>View Pet</a>
                     </div>
-                  
+                    </div>
                     
                 </form>";
                 
@@ -925,7 +922,9 @@ function updateThumbnail(dropZoneElement, file) {
                         coupon_code,
                         transaction_code,
                         date_confirmed,
-                        amount
+                        amount,
+                        status
+
                         
                     ) 
                     VALUES
@@ -936,7 +935,8 @@ function updateThumbnail(dropZoneElement, file) {
                         '$coupon_code',
                         '$transaction_code',
                         '$today',
-                        '$service_cost'
+                        '$service_cost',
+                        'NOT USED'
                     )");
                     
                     if(!$confirm->execute())
@@ -1549,9 +1549,26 @@ function updateThumbnail(dropZoneElement, file) {
                                 }
                                 
                             echo "</div>
-                        </form>";
+                            <p>".$row2['status']."</p>";
+                            if($row2['status'] != 'USED')
+                            {
+                                echo "<button name = 'confirm' value = ".$row2['id'].">Confirm</button>";
+                            }
+                        echo"</form>";
                     }
                 endwhile;
+                if(isset($_POST['confirm']))
+                {
+                    $id = $_POST['confirm'];
+                    $sql = $con->prepare("UPDATE confirmed_services SET status = 'USED' WHERE id = '$id'");
+                    $sql->execute();
+
+                    if($sql->execute())
+                    {
+                        echo "<script>alert('Confirmed!');</script>";
+                        echo "<script>window.open('index.php', '_self');</script>";
+                    }
+                }
             }
         }
     }
