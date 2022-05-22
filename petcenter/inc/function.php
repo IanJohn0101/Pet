@@ -982,6 +982,7 @@ function updateThumbnail(dropZoneElement, file) {
         $sql3->execute();
 
         $row2 = $sql3->fetch();
+        
 
         // <th>User Name</th>
         //     <th>Coupon Code</th>
@@ -1009,8 +1010,13 @@ function updateThumbnail(dropZoneElement, file) {
                 {
                     echo "<td>".$row['coupon_code']."</td>";
                 }
-                echo 
-                "<td>".$row['transaction_code']."</td>
+                if($row['status'] == "USED")
+                {
+                    $total_amount+=$row['amount'];
+                }
+                
+                echo"
+                <td>".$row['transaction_code']."['".$row['status']."']</td>
                 <td>".$row['amount']."</td>
                 <td>".$row['date_confirmed']."</td>
             </tr>";   
@@ -1021,7 +1027,7 @@ function updateThumbnail(dropZoneElement, file) {
             <td></td>
             <td></td>
             <td></td>
-            <td>Total Amount: ".$row2['SUM(amount)']."</td>
+            <td>Collected Amount: ".$total_amount."</td>
         </tr>";
     }
 
@@ -1563,7 +1569,7 @@ function updateThumbnail(dropZoneElement, file) {
                         $empty_coupon = "N/A";
                         echo
                         "<form method = 'POST'>
-                            <div class = 'hed'>
+                            <div class = 'hedBelow'>
                                 <p>".$row2['transaction_code']."</p>
                                 <p>".$user_username."</p>
                                 <p>".$row2['date_confirmed']."</p>";
@@ -1576,13 +1582,15 @@ function updateThumbnail(dropZoneElement, file) {
                                     echo "<p>".$coupon_code."</p>";
                                 }
                                 
-                            echo "</div>
+                            echo "
                             <p>".$row2['status']."</p>";
                             if($row2['status'] != 'USED')
                             {
                                 echo "<button name = 'confirm' value = ".$row2['id'].">Confirm</button>";
                             }
-                        echo"</form>";
+                        echo"
+                        </div>
+                        </form>";
                     }
                 endwhile;
                 if(isset($_POST['confirm']))
