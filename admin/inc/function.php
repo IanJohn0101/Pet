@@ -603,7 +603,10 @@
         endwhile;
         echo
         "<td>
-            <p class = 'det' style = 'margin-left:1.5rem'>Amount Collected:</p><p class = 'figures'> P".$row2['SUM(total_amount)']."</p>
+            <p class = 'det'>Amount Collected:</p>
+        </td>
+        <td>
+        <p class = 'figures'> ₱".$row2['SUM(total_amount)']."</p>
         </td>";
     }
 
@@ -1576,8 +1579,10 @@
                 <p class = 'okss'>".$row['user_email']."</p>
                 <p class = 'okss'>".$row['user_contactnumber']."</p>
                 <p class = 'okss'>".$row['user_address']."</p>
+                <divs>
                 <a class = 'dbtn' href = 'delete_user.php?delete=".$row['user_id']."'>Delete User</a>
                 <a class = 'dbtn' href = 'view_pet.php?view=".$row['user_id']."'>View Pet</a>
+                </divs>
                
          </div>";
         endwhile;

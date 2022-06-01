@@ -105,7 +105,6 @@ else
             <p class = 'lebsH'>Order Placed</p>
             <p class = 'lebsH'>Total Amount</p>
             <p class = 'lebsH'>Delivery Date</p>
-            <p class = 'lebsH'>Action</p>
         </div>
 
             <?php
