@@ -109,7 +109,7 @@ else
         </div>
 
             <?php
-                echo viewall_orders();
+                echo search_order_id();
             ?>
        
  

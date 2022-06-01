@@ -535,6 +535,7 @@
                 mail($receiver, $subject, $body, $sender);
     
                 $view_details = $con->query("SELECT pro_id, qty FROM orders_tbl WHERE order_id = '$order_id'");
+                
                 $view_details->setFetchMode(PDO:: FETCH_ASSOC);
                 $view_details->execute(); 
                 
@@ -542,7 +543,7 @@
                     $pro_id = $row['pro_id'];
                     $qty = $row['qty'];
     
-                    $update_qty = $con->prepare("UPDATE product_tbl SET pro_quantity=pro_quantity-$qty WHERE pro_id = $pro_id");
+                    $update_qty = $con->prepare("UPDATE product_tbl SET pro_quantity=pro_quantity-$qty/$qty WHERE pro_id = $pro_id");
                     $update_qty->setFetchMode(PDO:: FETCH_ASSOC);
                     $update_qty->execute();
                 endwhile;
@@ -1295,6 +1296,23 @@
             {
                 echo
                 "<h2>Transaction Number not Found!</h2>";
+            }
+        }
+    }
+
+    function search_order_id()
+    {
+        include("inc/db.php");
+        if(isset($_GET['search']) && isset($_GET['order_id']))
+        {
+            $order_id = $_GET['order_id'];
+            $sql = $con->prepare("SELECT * FROM orders_tbl WHERE order_id = '$order_id'");
+            $sql->setFetchMode(PDO::FETCH_ASSOC);
+            $sql->execute();
+
+            if($sql->rowCount()>0)
+            {
+
             }
         }
     }
