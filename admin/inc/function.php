@@ -1170,10 +1170,11 @@
                         <p class = 'lebs'>".$row['contact_number']."</p>
                         <p class = 'lebs'>".$row['date_confirmed']."</p>
                         <p class = 'lebs'>".$row['coupon_code']."</p>
+                        <p class = 'lebs'>P".$row['amount'].".00</p>
                         </div>
                     </form>";
                 endwhile;   
-                echo "Total Donation: $net_total";
+                echo "Total Donation :P$net_total.00";
                 echo "<br>";
                 echo "Total Donor/s:",$show_ledger->rowCount();
             }
@@ -1205,6 +1206,7 @@
                 <p class = 'lebs'>".$row['contact_number']."</p>
                 <p class = 'lebs'>".$row['date_confirmed']."</p>
                 <p class = 'lebs'>".$row['coupon_code']."</p>
+                <p class = 'lebs'>P".$row['amount'].".00</p>
                 
             </div>
            
@@ -1315,7 +1317,9 @@
 
             if($sql->rowCount()>0)
             {
-
+                while($row = $sql->fetch()):
+                    
+                endwhile;
             }
         }
     }

@@ -23,15 +23,15 @@
         function content(){
             
             include("inc/db.php"); 
+            session_start();
             if(isset($_GET['order_id']))
             {
-                
-
+                $user_id = $_SESSION['user_id'];
                 $q = $con->query("
                 SELECT od.order_id, od.order_date, od.delivery_status, sum(od.qty * od.price), GROUP_CONCAT(concat(od.pro_name, '(x', od.qty, ')') SEPARATOR ', ') items FROM
                 (select o.order_id, p.pro_name, count(p.pro_name) qty, p.pro_price price, o.delivery_status, o.order_date
                 from orders_tbl o join product_tbl p on o.pro_id = p.pro_id
-                WHERE o.user_id = o.user_id
+                WHERE o.user_id = $user_id 
                 group by o.order_id, p.pro_name, o.delivery_status, o.order_date) od
                 group by od.order_id, od.delivery_status, od.order_date    
                 ");
@@ -61,6 +61,10 @@
                     $user_username = $row_username['user_username'];
                     $user_contactnumber = $row_username['user_contactnumber'];
                     $user_address = $row_username['user_address'];
+                    $barangay = $row_username['barangay'];
+                    $st = $row_username['st'];
+                    $municipality = $row_username['municipality'];
+                    $user_email = $row_username['user_email'];
                     
                     $this->SetFont('Times', 'B', 12);
                     $this->Cell(60, 10, $order_id, 1,0,'C');
@@ -71,7 +75,9 @@
                     if($row_username['municipality'] == "Mandaue City")
                     {
                         $this->Cell(220, 10, 'Total Amount:', 0,true,'R');
-                        $this->Cell(220, 10, $mandaue, 0,true,'R');
+                        $this->Cell(200, 0, 'P', 0,true,'R');
+                        $this->Cell(207, 0, $mandaue, 0,true,'R');
+                        $this->Cell(212, 0, '.00', 0,true,'R');
                         $this->Ln();
                     }
                     if($row_username['municipality'] == "Cebu City")
@@ -93,10 +99,13 @@
                         $this->Ln();
                     }
 
-                    $this->Cell(220, 10, "User Details:", 0, true, 'R');
-                    $this->Cell(220, 10, "Username: $user_username", 0, true, 'R');
-                    $this->Cell(220, 0, "Location: $user_address", 0, true, 'R');
-                    $this->Cell(220, 10, "Contact Number: $user_contactnumber", 0, true, 'R');
+                    $this->Cell(370, 10, $user_username, 0, true, 'T');
+                    $this->Cell(16, 0, $st, 0, true, 'R');
+                    $this->Cell(32, 0, $barangay, 0, true, 'R');
+                    $this->Cell(32, 0, ',', 0, true, 'R');
+                    $this->Cell(59, 0, $municipality, 0, true, 'R');
+                    $this->Ln();
+                    $this->Cell(50, 10, $user_email, 0, true, 'R');
                 }
             }
         }
@@ -108,9 +117,12 @@
         }
 
         function userdetails(){
-            $this->SetRightMargin(30);
+            $this->SetRightMargin(50);
             $this->SetFont('Arial', '', 12);
-            
+            $this->Cell(220, 10, "Pet Society", 0, true, 'L');
+            $this->Cell(220, 0, "www.petsociety.com.ph", 0, true, 'L');
+            $this->Cell(220, 10, "09995967301", 0, true, 'L');
+
         }
 
         function storedetails(){
@@ -129,9 +141,10 @@
     
     $pdf->AliasNbPages();
     $pdf->AddPage('L','A4',0);
+    $pdf->userdetails();
     $pdf->headerTable();
     $pdf->content();
     $pdf->totalAmount();
-    $pdf->userdetails();
+    
     $pdf->Output();
 ?>  

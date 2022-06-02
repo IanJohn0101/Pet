@@ -84,6 +84,8 @@
             <p  class = 'heads'>Date Confirmed</p>
 
             <p  class = 'heads'>Coupon Code</p>
+
+            <p  class = 'heads'>Amount Donated</p>
             <div></div>
         </div>
         <tr>
@@ -158,7 +160,7 @@
         margin-top: 2vh;
         margin-left: 20px;
         background: #fff;
-        width: 95%;
+        width: 120%;
         border-radius: 5px;
         padding: 10px;
         box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
@@ -183,7 +185,7 @@
     }
     .gridnasad{
         display: grid;
-        grid-template-columns:  15% 20% 20% 20% 10% 10%;
+        grid-template-columns:  15% 20% 20% 20% 10% 10% 10%;
         text-align: center;
         font-weight: bold;
         border-bottom: 1px solid black;
@@ -195,7 +197,7 @@
     }
     .inner{
         display: grid;
-        grid-template-columns: 15% 20% 20% 20% 10% 10%;
+        grid-template-columns: 15% 20% 20% 20% 10% 10% 10%;
         margin-top: 1%;
     padding: 10px;
     background: #f4f4f4;
