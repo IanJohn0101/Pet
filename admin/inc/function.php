@@ -1311,15 +1311,182 @@
         if(isset($_GET['search']) && isset($_GET['order_id']))
         {
             $order_id = $_GET['order_id'];
-            $sql = $con->prepare("SELECT * FROM orders_tbl WHERE order_id = '$order_id'");
-            $sql->setFetchMode(PDO::FETCH_ASSOC);
-            $sql->execute();
+            $q = $con->query("
+            SELECT od.order_id, od.order_date, od.delivery_status, sum(od.qty * od.price), GROUP_CONCAT(concat(od.pro_name, '(x', od.qty, ')') SEPARATOR ', ') items FROM
+            (select o.order_id, p.pro_name, count(p.pro_name) qty, p.pro_price price, o.delivery_status, o.order_date
+            from orders_tbl o join product_tbl p on o.pro_id = p.pro_id
+            WHERE order_id = $order_id
+            group by o.order_id, p.pro_name, o.delivery_status, o.order_date) od
+            group by od.order_id, od.delivery_status, od.order_date    
+            ");
 
-            if($sql->rowCount()>0)
+            $orders = $q->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($orders as $order) 
             {
-                while($row = $sql->fetch()):
+                // $net_total += $order['sum(od.qty * od.price)'];
+                $order_id = $order['order_id'];
+                $mandaue = $order['sum(od.qty * od.price)']+10;
+                $cebu = $order['sum(od.qty * od.price)']+12;
+                $concolacion = $order['sum(od.qty * od.price)']+12;
+                $lapulapu = $order['sum(od.qty * od.price)']+12;
+                echo
+                "<form method = 'POST' enctype = 'multipart/form-data' id = 'forming'>
+                        
+                        <input type = 'hidden' name = 'order_id' value = '".$order['order_id']."' />
+
+                        <p class = 'dataLebs'>".$order_id."</p>";
+                        $view_details = $con->prepare("SELECT * FROM orders_tbl WHERE order_id = '$order_id'");
+                        $view_details->setFetchMode(PDO:: FETCH_ASSOC);
+                        $view_details->execute();
                     
-                endwhile;
+                        $row = $view_details->fetch();
+                        $user_id = $row['user_id'];
+            
+                        $fetch_username=$con->prepare("SELECT * FROM users_table WHERE user_id = '$user_id'");
+                        $fetch_username->setFetchMode(PDO:: FETCH_ASSOC);
+                        $fetch_username->execute();
+            
+                        $row_username = $fetch_username->fetch();
+                        echo "
+                        <input type = 'hidden' name = 'user_username' value = '".$row_username['user_username']."' />
+
+                        <a href = 'user.php?user=".$row_username['user_id']."'><p  class = 'dataLebs'>".$row_username['user_username']."</p></a>";
+                    echo" 
+                    <input type = 'hidden' name = 'items' value = '".$order['items']."' style = 'color:white' />
+                    <p  class = 'dataLebss'>".$order['items']."</p>
+                    <p  class = 'dataLebs'>".$order['order_date']."</p>";
+                    if($row_username['municipality'] == "Mandaue City")
+                    {
+                        echo
+                        "<input type = 'hidden' name = 'total_amount' value = '".$mandaue."' />
+                        <p  class = 'dataLebs'>".$mandaue."</p>";
+                    }
+                    if($row_username['municipality'] == "Cebu City")
+                    {
+                        echo
+                        "<input type = 'hidden' name = 'total_amount' value = '".$cebu."' />
+                        <p  class = 'dataLebs'>".$cebu."</p>";
+                    }
+                    if($row_username['municipality'] == "Consolacion")
+                    {
+                        echo
+                        "<input type = 'hidden' name = 'total_amount' value = '".$concolacion."' />
+                        <p  class = 'dataLebs'>".$concolacion."</p>";
+                    }
+                    if($row_username['municipality'] == "Lapu-lapu")
+                    {
+                        echo
+                        "<input type = 'hidden' name = 'total_amount' value = '".$lapulapu."' />
+                        <p  class = 'dataLebs'>".$lapulapu."</p>";
+                    }
+                    echo" <input class = 'dets' type = 'date' name = 'delivery_date' required/>";
+                   
+                     echo"<div class ='bots'>
+                    <button class = 'buto' name = 'confirm_order' value = ".$order['order_id'].">Confirm</button>
+                     <a class = 'busog' href='cancel_order.php?order_id=".$order['order_id']."'>Cancel</a>
+                     <a class = 'busog' href='print_receipt.php?order_id=".$order['order_id']."' target='_blank'>Print Receipt</a>
+                     </div>
+ 
+                </form>";
+                if(isset($_POST['confirm_order']))
+                {
+                    $order_id = $_POST['confirm_order'];
+        
+                    $items = $_POST['items'];
+                    $total_amount = $_POST['total_amount'];
+                    $user_username = $_POST['user_username'];
+                    $delivery_date = $_POST['delivery_date'];
+                    $delivery_status = 'FOR DELIVERY';
+        
+                    $fetch_user=$con->prepare("SELECT * FROM users_table WHERE user_username = '$user_username'");
+                    $fetch_user->setFetchMode(PDO:: FETCH_ASSOC);
+                    $fetch_user->execute();
+                
+                    $row_username = $fetch_user->fetch();
+                    $location = $row_username['user_address'];
+                    $receiver = $row_username['user_email'];
+                    $subject = "Order Confirmation Mail";
+                    $body = "
+                    Greetings!
+        
+                    Your order has been confirmed and will be delivered on $delivery_date with order #$order_id 
+        
+                    Items include: 
+                    $items
+        
+                    Please keep your lines open because your items will arrive at your destination according to the aforementioned delivery date. 
+                    
+                    Thank you for being part of Pet Society where we treat your pet as our family. Enjoy!
+        
+                    Meow,
+                    Pet Society
+                    ";
+                    $sender = "ianjohn0101@gmail.com";
+                    
+        
+                    $datenow = getdate();
+        
+                    $today = $datenow['year'] . '-' . $datenow['mon'] . '-' . $datenow['mday'];
+        
+                    $dateTimeStamp = strtotime($delivery_date);
+                    $dateTimeStamp2 = strtotime($today);
+        
+                    // var_dump($dateTimeStamp);
+                    // var_dump($dateTimeStamp2);
+        
+                    if($dateTimeStamp < $dateTimeStamp2)
+                    {
+                        echo "<script>alert('Date Chosen Invalid!');</script>";
+                    }
+                    else
+                    {
+                        $add_delivery = $con->prepare("INSERT INTO delivery_tbl
+                        (
+                            order_id, 
+                            items, 
+                            total_amount,
+                            user_username, 
+                            delivery_date, 
+                            delivery_status
+                        ) 
+                        VALUES
+                        (
+                            $order_id,
+                            '$items',
+                            '$total_amount',
+                            '$user_username',
+                            '$delivery_date',
+                            '$delivery_status'
+                        )");
+            
+                        if(!$add_delivery->execute())
+                        {
+                            return;
+                        }
+                        
+                        mail($receiver, $subject, $body, $sender);
+            
+                        $view_details = $con->query("SELECT pro_id, qty FROM orders_tbl WHERE order_id = '$order_id'");
+                        
+                        $view_details->setFetchMode(PDO:: FETCH_ASSOC);
+                        $view_details->execute(); 
+                        
+                        while($row = $view_details->fetch()):
+                            $pro_id = $row['pro_id'];
+                            $qty = $row['qty'];
+            
+                            $update_qty = $con->prepare("UPDATE product_tbl SET pro_quantity=pro_quantity-$qty/$qty WHERE pro_id = $pro_id");
+                            $update_qty->setFetchMode(PDO:: FETCH_ASSOC);
+                            $update_qty->execute();
+                        endwhile;
+            
+                        $delete_ord = $con->prepare("DELETE FROM orders_tbl WHERE order_id = '$order_id'");
+                        if(!$delete_ord->execute())
+                        {
+                            return;  
+                        }
+                    }
+                }
             }
         }
     }

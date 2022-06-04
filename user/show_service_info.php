@@ -43,6 +43,8 @@
         }
         .loces{
             width: 70%;
+            margin-top:30%;
+            margin-left:-100%;
             
         }
         .loc2{
@@ -134,8 +136,10 @@
         }
 
         #okpic{
-            height: 450px;
-            width: 100%;
+            height: 550px;
+            width: -100%;
+            margin-left: 7%;
+            margin-top: -2%;
             
         }
         #pic{
